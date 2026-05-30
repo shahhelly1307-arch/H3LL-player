@@ -4,17 +4,21 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>H3LL Music Player</title>
+<link rel="icon" href="assets/pink/favicon.png"/>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{--pk:#d4607a;--pk2:#f4a7b9;--pk3:#fce8ee;--pk4:#fdf6f8;--tx:#4a2535;--tx2:#8a6070;}
 body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 10px 28px;flex-direction:column;}
+
 /* STARS */
 .stars{position:fixed;inset:0;pointer-events:none;z-index:0;}
 .star{position:absolute;background:#fff;border-radius:50%;animation:tw var(--d,2s) var(--dl,0s) infinite;}
 @keyframes tw{0%,100%{opacity:.1;}50%{opacity:.85;}}
+
 /* WINDOW */
 .win{position:relative;z-index:2;width:400px;max-width:95vw;background:var(--pk4);border:2.5px solid var(--pk2);border-radius:14px;box-shadow:4px 4px 0 var(--pk),0 0 0 1px rgba(255,255,255,.12),0 16px 48px rgba(180,60,100,.4);margin-top:30px;}
+
 /* BOW */
 .bow{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:64px;height:30px;z-index:10;}
 .bwl,.bwr{position:absolute;top:4px;width:26px;height:20px;background:var(--pk2);border:2px solid var(--pk);}
@@ -24,19 +28,25 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
 .bwrl,.bwrr{position:absolute;bottom:-6px;width:9px;height:12px;background:var(--pk2);border-radius:0 0 5px 5px;}
 .bwrl{left:50%;margin-left:-6px;transform:rotate(-12deg);}
 .bwrr{left:50%;margin-left:1px;transform:rotate(12deg);}
+
 /* HEARTS */
 .ch{position:absolute;font-size:15px;color:var(--pk2);}
 .ch.tl{top:-2px;left:8px;}.ch.tr{top:-2px;right:8px;}
 .ch.bl{bottom:-2px;left:8px;}.ch.br{bottom:-2px;right:8px;}
 .ch.ml{top:50%;left:-5px;transform:translateY(-50%);}
 .ch.mr{top:50%;right:-5px;transform:translateY(-50%);}
+
 /* TITLEBAR */
 .tbar{background:var(--pk3);border-radius:12px 12px 0 0;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--pk2);}
 .ttx{font-family:'Caveat',cursive;font-size:19px;color:var(--tx);}
 .wbtns{display:flex;gap:4px;align-items:center;position:relative;}
-.gbtn{background:none;border:none;cursor:pointer;font-size:15px;color:var(--tx2);padding:2px 5px;transition:transform .35s;}
-.gbtn:hover{transform:rotate(90deg);}
-.winb{width:20px;height:20px;border-radius:4px;border:1.5px solid var(--pk2);background:var(--pk4);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--tx2);cursor:pointer;}
+
+/* Window control buttons using images */
+.winb-img{width:22px;height:22px;cursor:pointer;object-fit:contain;transition:transform .15s;}
+.winb-img:hover{transform:scale(1.15);}
+.gbtn-img{width:22px;height:22px;cursor:pointer;object-fit:contain;transition:transform .35s;border:none;background:none;padding:0;}
+.gbtn-img:hover{transform:rotate(90deg);}
+
 /* SETTINGS */
 .spanel{position:absolute;top:34px;right:0;z-index:999;width:215px;background:#1a0c2a;color:#fff;border-radius:10px;padding:14px;display:none;box-shadow:0 8px 32px rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.1);max-height:78vh;overflow-y:auto;}
 .spanel.open{display:block;}
@@ -56,27 +66,30 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
 .snum{color:rgba(255,255,255,.22);min-width:14px;font-size:10px;}
 .stx{flex:1;overflow:hidden;text-overflow:ellipsis;}
 .seq{color:var(--pk2);animation:tw .5s steps(2) infinite;}
+
 /* Lyrics */
 .lbox{background:rgba(0,0,0,.28);border-radius:7px;padding:10px;max-height:160px;overflow-y:auto;font-size:11px;line-height:1.9;color:rgba(255,255,255,.72);white-space:pre-wrap;font-family:'Nunito',sans-serif;}
 .lbox::-webkit-scrollbar{width:3px;}
 .lbox::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);}
 .ltitle{font-size:12px;color:var(--pk2);font-weight:700;margin-bottom:5px;}
+
 /* SCENE */
-.scene{position:relative;width:100%;border-bottom:2px solid var(--pk2);overflow:hidden;}
-.scene svg{display:block;width:100%;height:auto;}
-@keyframes vsp{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
-#VG{transform-origin:50% 50%;transform-box:fill-box;transition:opacity .3s;}
-#VG.sp{animation:vsp 3.5s linear infinite;}
-#TA{transform-origin:82% 20%;transform-box:fill-box;transition:transform .7s cubic-bezier(.4,0,.2,1);}
-#TA.pl{transform:rotate(13deg);}
+.scene{position:relative;width:100%;border-bottom:2px solid var(--pk2);overflow:hidden;background:#2e1838;height:200px;display:flex;align-items:center;justify-content:center;transition:background 0.4s;}
+/* Pink: record player — centred, natural size, transparent bg */
+.scene-img{display:block;max-height:180px;max-width:88%;object-fit:contain;opacity:1;transition:opacity 0.3s ease;}
+/* Blue/purple: portrait card — narrower */
+.scene-img.frame-mode{max-height:190px;max-width:50%;}
+
 /* BOTTOM */
 .bpanel{background:var(--pk4);padding:14px 16px 16px;border-radius:0 0 12px 12px;position:relative;}
 .bch-tl{position:absolute;top:7px;left:9px;font-size:13px;color:var(--pk2);opacity:.65;}
 .bch-tr{position:absolute;top:7px;right:9px;font-size:13px;color:var(--pk2);opacity:.65;}
-/* NOW PLAYING */
+
+/* NOW PLAYING — album frame image */
 .nprow{display:flex;align-items:center;gap:11px;margin-bottom:13px;padding-top:4px;}
-.aart{width:58px;height:58px;flex-shrink:0;border-radius:8px;border:2px solid var(--pk2);background:var(--pk3);overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:24px;}
-.aart img{width:100%;height:100%;object-fit:cover;}
+.aart{width:58px;height:58px;flex-shrink:0;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;background:var(--pk3);}
+.aart-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:2;pointer-events:none;}
+.aart-inner{width:100%;height:100%;object-fit:cover;z-index:1;display:block;}
 .tdet{flex:1;overflow:hidden;}
 .npl{font-family:'Caveat',cursive;font-size:13px;color:var(--tx2);font-style:italic;}
 .tnw{overflow:hidden;}
@@ -84,37 +97,54 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
 .tnm.mq{animation:mq 10s linear infinite;}
 @keyframes mq{0%{transform:translateX(110%);}100%{transform:translateX(-110%);}}
 .tart{font-size:12px;color:var(--tx2);margin-top:1px;}
-/* CONTROLS */
+
+/* CONTROLS — image buttons */
 .ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:13px;}
-.cbtn{background:var(--pk4);border:2px solid var(--pk2);border-radius:9px;width:60px;height:42px;cursor:pointer;color:var(--tx);display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 var(--pk2),0 4px 10px rgba(180,60,100,.15);transition:all .12s;font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;}
-.cbtn:hover{background:var(--pk3);transform:translateY(-2px);}
-.cbtn:active{transform:translateY(2px);box-shadow:0 1px 0 var(--pk2);}
-.cbtn.play{font-size:20px;}
-/* PROGRESS */
+.cbtn-img{width:52px;height:40px;object-fit:contain;cursor:pointer;transition:transform .12s,filter .12s;}
+.cbtn-img:hover{transform:translateY(-2px);filter:brightness(1.15);}
+.cbtn-img:active{transform:translateY(2px);filter:brightness(.9);}
+.cbtn-img.play{width:60px;height:44px;}
+
+/* PROGRESS — image progress bar */
 .prog{margin-bottom:11px;}
 .prow{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-.pstar{font-size:19px;flex-shrink:0;}
-.pbar{flex:1;height:7px;background:rgba(212,96,122,.13);border:1.5px solid var(--pk2);border-radius:4px;cursor:pointer;position:relative;user-select:none;}
-.pfill{height:100%;background:linear-gradient(90deg,var(--pk),var(--pk2));border-radius:4px;width:0%;pointer-events:none;position:relative;}
+.pstar-img{width:22px;height:22px;object-fit:contain;flex-shrink:0;cursor:pointer;transition:transform .2s;}
+.pstar-img:hover{transform:scale(1.2);}
+.pbar-wrap{flex:1;position:relative;height:20px;display:flex;align-items:center;}
+.pbar-bg{position:absolute;left:0;top:50%;transform:translateY(-50%);width:100%;height:14px;object-fit:fill;pointer-events:none;border-radius:4px;}
+.pbar{flex:1;height:14px;background:transparent;border-radius:4px;cursor:pointer;position:relative;user-select:none;}
+.pfill{height:100%;background:linear-gradient(90deg,var(--pk),var(--pk2));border-radius:4px;width:0%;pointer-events:none;position:relative;opacity:.7;}
 .pthumb{position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:15px;height:15px;background:var(--pk);border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 6px rgba(212,96,122,.6);cursor:grab;}
 .trow{display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);font-family:monospace;padding:0 3px;}
-/* VOLUME */
+
+/* VOLUME — image volume bar */
 .volwrap{margin-bottom:12px;}
 .voltop{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
 .vollbl{font-size:11px;color:var(--tx2);font-weight:600;letter-spacing:.5px;}
 .volnum{font-size:11px;color:var(--pk);font-weight:700;font-family:monospace;background:rgba(212,96,122,.1);border:1px solid var(--pk2);border-radius:10px;padding:1px 8px;}
 .voltrack{position:relative;height:22px;display:flex;align-items:center;}
-.volempty{flex:1;height:5px;background:rgba(212,96,122,.12);border:1.5px solid var(--pk2);border-radius:3px;position:relative;cursor:pointer;}
-.volfill{height:100%;background:linear-gradient(90deg,var(--pk),var(--pk2));border-radius:3px;width:80%;pointer-events:none;}
+.volempty{flex:1;height:14px;background:transparent;border-radius:3px;position:relative;cursor:pointer;}
+.vol-bg{position:absolute;left:0;top:50%;transform:translateY(-50%);width:100%;height:14px;object-fit:fill;pointer-events:none;border-radius:3px;}
+.volfill{height:100%;background:linear-gradient(90deg,var(--pk),var(--pk2));border-radius:3px;width:80%;pointer-events:none;opacity:.7;}
 .volthumb{position:absolute;top:50%;transform:translateY(-50%);width:18px;height:18px;background:var(--pk);border:3px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(212,96,122,.55);cursor:grab;left:calc(80% - 9px);}
 .volthumb:hover{transform:translateY(-50%) scale(1.15);}
-.volicons{display:flex;justify-content:space-between;margin-top:5px;padding:0 1px;}
+.volicons{display:flex;justify-content:space-between;align-items:center;margin-top:5px;padding:0 1px;}
+.volic-img{width:24px;height:24px;object-fit:contain;cursor:pointer;transition:transform .15s,filter .15s;opacity:.75;}
+.volic-img:hover{transform:scale(1.15);opacity:1;}
+/* fallback emoji icons for extra vol buttons */
 .volic{font-size:16px;cursor:pointer;color:var(--tx2);transition:all .15s;padding:2px 4px;border-radius:4px;}
 .volic:hover{color:var(--pk);background:rgba(212,96,122,.1);}
+
 /* HEART */
 .bhrow{display:flex;justify-content:center;margin-top:4px;}
 .bigh{font-size:28px;color:var(--pk);cursor:pointer;transition:all .2s;filter:drop-shadow(0 2px 8px rgba(212,96,122,.5));line-height:1;}
 .bigh:hover{transform:scale(1.18);}
+
+/* shuffle / repeat row */
+.extra-row{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:10px;}
+.extra-btn{width:28px;height:28px;object-fit:contain;cursor:pointer;opacity:.6;transition:opacity .15s,transform .15s;}
+.extra-btn:hover{opacity:1;transform:scale(1.12);}
+.extra-btn.on{opacity:1;filter:drop-shadow(0 0 4px var(--pk));}
 </style>
 </head>
 <body>
@@ -129,8 +159,15 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
   <div class="tbar">
     <span class="ttx">h3ll player</span>
     <div class="wbtns">
-      <button class="gbtn" onclick="togS()">⚙</button>
-      <div class="winb">─</div><div class="winb" style="font-size:8px;">□</div><div class="winb">✕</div>
+      <!-- Settings button uses settings.png -->
+      <button class="gbtn-img" onclick="togS()" title="Settings" style="background:none;border:none;cursor:pointer;">
+        <img id="SETBTN" src="assets/pink/settings.png" alt="settings" style="width:22px;height:22px;object-fit:contain;transition:transform .35s;" onmouseover="this.style.transform='rotate(90deg)'" onmouseout="this.style.transform='rotate(0deg)'"/>
+      </button>
+      <!-- Window buttons: minimize, maximize, exit -->
+      <img id="MINBTN" class="winb-img" src="assets/pink/minimizer_button.png" alt="minimize" title="Minimize"/>
+      <img id="WINBTN" class="winb-img" src="assets/pink/window_button.png" alt="maximize" title="Maximize"/>
+      <img id="EXITBTN" class="winb-img" src="assets/pink/exit_button.png" alt="close" title="Close"/>
+
       <div class="spanel" id="spanel">
         <div class="sh4">theme</div>
         <div class="srow">
@@ -147,119 +184,62 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
     </div>
   </div>
 
-  <!-- SCENE -->
-  <div class="scene">
-    <svg viewBox="0 0 400 272" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="moonG" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#f8e870" stop-opacity=".6"/><stop offset="100%" stop-color="#f8e870" stop-opacity="0"/></radialGradient>
-        <linearGradient id="baseG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e8d4be"/><stop offset="100%" stop-color="#d2b496"/></linearGradient>
-        <linearGradient id="topG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#dac6ae"/><stop offset="100%" stop-color="#c6a688"/></linearGradient>
-        <radialGradient id="knobG" cx="38%" cy="35%" r="60%"><stop offset="0%" stop-color="#deccba"/><stop offset="100%" stop-color="#9e8e6e"/></radialGradient>
-      </defs>
-      <rect width="400" height="272" fill="#2e1838"/>
-      <rect x="0" y="215" width="400" height="57" fill="#1e0e28"/>
-      <line x1="0" y1="215" x2="400" y2="215" stroke="#4a2858" stroke-width="1.5" opacity=".7"/>
-      <!-- Window -->
-      <rect x="276" y="10" width="96" height="112" rx="5" fill="#160a2e" stroke="#7860a0" stroke-width="2.5"/>
-      <line x1="324" y1="10" x2="324" y2="122" stroke="#604880" stroke-width="1.5"/>
-      <line x1="276" y1="65" x2="372" y2="65" stroke="#604880" stroke-width="1.5"/>
-      <circle cx="352" cy="33" r="24" fill="url(#moonG)"/>
-      <circle cx="352" cy="33" r="16" fill="#f6e466"/>
-      <circle cx="360" cy="27" r="12.5" fill="#160a2e"/>
-      <circle cx="285" cy="20" r="1.2" fill="#fff" opacity=".85"/><circle cx="298" cy="36" r="1" fill="#fff" opacity=".7"/><circle cx="313" cy="17" r="1.4" fill="#fff" opacity=".8"/><circle cx="283" cy="52" r="1" fill="#fff" opacity=".55"/><circle cx="304" cy="50" r="1.2" fill="#fff" opacity=".9"/><circle cx="294" cy="82" r="1" fill="#fff" opacity=".5"/><circle cx="316" cy="78" r="1.4" fill="#fff" opacity=".65"/><circle cx="340" cy="80" r="1" fill="#fff" opacity=".6"/><circle cx="357" cy="92" r="1" fill="#fff" opacity=".75"/><circle cx="330" cy="96" r="1.2" fill="#fff" opacity=".5"/>
-      <!-- Tulips -->
-      <line x1="357" y1="196" x2="350" y2="164" stroke="#3a6838" stroke-width="2.5"/>
-      <line x1="369" y1="196" x2="369" y2="156" stroke="#3a6838" stroke-width="2.5"/>
-      <line x1="381" y1="196" x2="386" y2="161" stroke="#3a6838" stroke-width="2.5"/>
-      <ellipse cx="349" cy="159" rx="9" ry="12" fill="#f4a7b9" id="T1" transform="rotate(-14,349,159)" stroke="#e0789a" stroke-width="1.2"/>
-      <ellipse cx="369" cy="150" rx="10" ry="13" fill="#e8789a" id="T2" stroke="#c85878" stroke-width="1.2"/>
-      <ellipse cx="387" cy="155" rx="9" ry="12" fill="#f4bece" id="T3" transform="rotate(12,387,155)" stroke="#e0789a" stroke-width="1.2"/>
-      <path d="M351,196 Q347,218 351,228 L387,228 Q391,218 387,196 Z" fill="#887aaa" stroke="#9888bc" stroke-width="1.5"/>
-      <ellipse cx="369" cy="196" rx="19" ry="5" fill="#9888bc"/>
-      <!-- Turntable top -->
-      <rect x="44" y="144" width="238" height="38" rx="7" fill="url(#topG)" stroke="#bea07c" stroke-width="1.5"/>
-      <!-- Glass lid -->
-      <polygon points="62,144 264,144 252,76 74,76" fill="rgba(155,190,215,0.09)" stroke="rgba(205,228,245,0.52)" stroke-width="1.5"/>
-      <line x1="62" y1="144" x2="74" y2="76" stroke="rgba(205,228,245,.38)" stroke-width="1"/>
-      <line x1="264" y1="144" x2="252" y2="76" stroke="rgba(205,228,245,.38)" stroke-width="1"/>
-      <line x1="78" y1="136" x2="89" y2="80" stroke="rgba(255,255,255,.12)" stroke-width="6" stroke-linecap="round"/>
-      <rect x="153" y="72" width="34" height="7" rx="3.5" fill="rgba(195,218,238,.42)" stroke="rgba(205,228,245,.55)" stroke-width="1"/>
-      <!-- Vinyl -->
-      <g id="VG">
-        <circle cx="174" cy="161" r="56" fill="#0c0c0c" stroke="#282828" stroke-width="2"/>
-        <circle cx="174" cy="161" r="51" fill="none" stroke="#181818" stroke-width="2"/>
-        <circle cx="174" cy="161" r="45" fill="none" stroke="#202020" stroke-width="1.5"/>
-        <circle cx="174" cy="161" r="39" fill="none" stroke="#181818" stroke-width="2"/>
-        <circle cx="174" cy="161" r="33" fill="none" stroke="#202020" stroke-width="1.5"/>
-        <circle cx="174" cy="161" r="27" fill="none" stroke="#181818" stroke-width="1.5"/>
-        <circle cx="174" cy="161" r="19" fill="#f4a7b9" id="VL"/>
-        <circle cx="174" cy="161" r="19" fill="none" stroke="#e0789a" stroke-width="1.5"/>
-        <circle cx="174" cy="161" r="14" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1"/>
-        <circle cx="174" cy="161" r="4" fill="#fff"/>
-        <circle cx="174" cy="161" r="2.5" fill="#555"/>
-      </g>
-      <!-- Turntable base -->
-      <rect x="44" y="182" width="238" height="90" rx="9" fill="url(#baseG)" stroke="#bea07c" stroke-width="2"/>
-      <rect x="50" y="188" width="226" height="4" rx="2" fill="rgba(255,255,255,.22)"/>
-      <!-- Tonearm -->
-      <g id="TA">
-        <circle cx="258" cy="114" r="7.5" fill="#b4a494" stroke="#968474" stroke-width="1.5"/>
-        <circle cx="258" cy="114" r="3" fill="#888"/>
-        <rect x="255.8" y="114" width="3.5" height="62" rx="1.8" fill="#bbb" transform="rotate(-3,258,114)"/>
-        <rect x="244" y="170" width="19" height="8.5" rx="3" fill="#ccc" stroke="#aaa" stroke-width="1" transform="rotate(-3,258,114)"/>
-        <circle cx="248" cy="179" r="5" fill="#e8789a" id="NDL" stroke="#444" stroke-width="1" transform="rotate(-3,258,114)"/>
-      </g>
-      <!-- Knob -->
-      <circle cx="256" cy="206" r="13" fill="url(#knobG)" stroke="#ae9474" stroke-width="1.5"/>
-      <circle cx="256" cy="206" r="4.5" fill="#888"/>
-      <!-- Speaker -->
-      <rect x="54" y="220" width="86" height="44" rx="5" fill="#c4ac96" stroke="#b09878" stroke-width="1.2"/>
-      <rect x="58" y="224" width="78" height="36" rx="3" fill="#b89e88"/>
-      <line x1="66" y1="226" x2="66" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/><line x1="73" y1="226" x2="73" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/><line x1="80" y1="226" x2="80" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/><line x1="87" y1="226" x2="87" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/><line x1="94" y1="226" x2="94" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/><line x1="101" y1="226" x2="101" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/><line x1="108" y1="226" x2="108" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/><line x1="115" y1="226" x2="115" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/><line x1="122" y1="226" x2="122" y2="258" stroke="#9c8468" stroke-width="1" opacity=".55"/>
-      <line x1="58" y1="238" x2="136" y2="238" stroke="#9c8468" stroke-width="1" opacity=".38"/>
-      <line x1="58" y1="248" x2="136" y2="248" stroke="#9c8468" stroke-width="1" opacity=".38"/>
-      <!-- Display -->
-      <rect x="161" y="224" width="76" height="18" rx="4" fill="#111" stroke="#808080" stroke-width="1.2"/>
-      <text x="199" y="237" text-anchor="middle" font-family="monospace" font-size="8.5" fill="#e8789a" id="DISP">◄ ►◄► oo</text>
-      <!-- Extra buttons -->
-      <circle cx="275" cy="232" r="5.5" fill="#ddd" stroke="#bbb" stroke-width="1"/>
-      <circle cx="289" cy="232" r="5.5" fill="#ddd" stroke="#bbb" stroke-width="1"/>
-      <circle cx="275" cy="248" r="5.5" fill="#c8a0b0" stroke="#b08898" stroke-width="1"/>
-      <circle cx="289" cy="248" r="5.5" fill="#c8a0b0" stroke="#b08898" stroke-width="1"/>
-      <!-- Scene hearts -->
-      <text x="12" y="28" font-size="16" fill="#f4a7b9" opacity=".5">♥</text>
-      <text x="372" y="28" font-size="16" fill="#f4a7b9" opacity=".5">♥</text>
-    </svg>
+  <!-- SCENE: uses record_player.png for pink, frame.png for blue/purple -->
+  <div class="scene" id="SCENE">
+    <img id="SCENE_IMG" class="scene-img" src="assets/pink/record_player.png"
+         style="opacity:1;transition:opacity 0.3s;"
+         alt="player scene"/>
   </div>
 
   <!-- BOTTOM PANEL -->
   <div class="bpanel">
     <div class="bch-tl">♥</div><div class="bch-tr">♥</div>
+
+    <!-- NOW PLAYING: album_frame.png as overlay frame -->
     <div class="nprow">
-      <div class="aart" id="AART">♪</div>
+      <div class="aart" id="AART">
+        <span id="AART_FALLBACK" style="font-size:24px;z-index:1;">♪</span>
+        <img id="AART_FRAME" class="aart-frame" src="assets/pink/album_frame.png" alt="" onerror="this.style.display='none'"/>
+      </div>
       <div class="tdet">
         <div class="npl">now playing...</div>
         <div class="tnw"><span class="tnm" id="TNAME">select a song</span></div>
         <div class="tart" id="TART">tap ⚙ to browse</div>
       </div>
     </div>
-    <div class="ctrls">
-      <button class="cbtn" onclick="prevT()">◄◄</button>
-      <button class="cbtn play" id="PBTN" onclick="togPlay()">▶</button>
-      <button class="cbtn" onclick="nextT()">▶▶</button>
+
+    <!-- SHUFFLE / REPEAT -->
+    <div class="extra-row">
+      <img id="SHUF" class="extra-btn" src="assets/pink/shuffle_button.png" alt="shuffle" title="Shuffle" onclick="togShuffle()" onerror="this.style.display='none'"/>
+      <img id="REP"  class="extra-btn" src="assets/pink/repeat_button.png"  alt="repeat"  title="Repeat"  onclick="togRepeat()"  onerror="this.style.display='none'"/>
     </div>
+
+    <!-- CONTROLS: backwards, play/pause, forwards -->
+    <div class="ctrls">
+      <img class="cbtn-img" src="assets/pink/backwards_button.png" alt="prev" onclick="prevT()" onerror="this.outerHTML='<button class=\'cbtn\' onclick=\'prevT()\'>◄◄</button>'"/>
+      <img class="cbtn-img play" id="PBTN_IMG" src="assets/pink/play_button.png" alt="play/pause" onclick="togPlay()" onerror="this.outerHTML='<button class=\'cbtn play\' id=\'PBTN\' onclick=\'togPlay()\'>▶</button>'"/>
+      <img class="cbtn-img" src="assets/pink/forwards_button.png" alt="next" onclick="nextT()" onerror="this.outerHTML='<button class=\'cbtn\' onclick=\'nextT()\'>▶▶</button>'"/>
+    </div>
+
+    <!-- PROGRESS BAR: progress_bar.png as background, star.png as icon -->
     <div class="prog">
       <div class="prow">
-        <span class="pstar">⭐</span>
-        <div class="pbar" id="PBAR">
-          <div class="pfill" id="PFILL">
-            <div class="pthumb" id="PTHMB"></div>
+        <img id="STAR_IMG" class="pstar-img" src="assets/pink/progress_bar.png"
+             style="width:22px;height:22px;border-radius:50%;object-fit:cover;"
+             onerror="this.outerHTML='<span class=\'pstar\'>⭐</span>'" alt="star" onclick="togLike()"/>
+        <div class="pbar-wrap">
+          <img class="pbar-bg" id="PBAR_BG" src="assets/pink/progress_bar.png" alt="" onerror="this.style.display='none'"/>
+          <div class="pbar" id="PBAR">
+            <div class="pfill" id="PFILL">
+              <div class="pthumb" id="PTHMB"></div>
+            </div>
           </div>
         </div>
       </div>
       <div class="trow"><span id="CT">0:00</span><span id="TT">0:00</span></div>
     </div>
-    <!-- VOLUME -->
+
+    <!-- VOLUME: volume_bar images + mute/volume buttons -->
     <div class="volwrap">
       <div class="voltop">
         <span class="vollbl">🎵 VOLUME</span>
@@ -267,17 +247,19 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
       </div>
       <div class="voltrack">
         <div class="volempty" id="VBAR" onclick="volClick(event)">
+          <img class="vol-bg" id="VBAR_BG" src="assets/pink/volume_bar_low.png" alt="" onerror="this.style.display='none'"/>
           <div class="volfill" id="VFILL"></div>
         </div>
         <div class="volthumb" id="VTHMB"></div>
       </div>
       <div class="volicons">
-        <span class="volic" onclick="setVol(0)" title="Mute">🔇</span>
-        <span class="volic" onclick="setVol(Math.max(0,curVol-10))" title="Down">🔉</span>
-        <span class="volic" onclick="setVol(Math.min(100,curVol+10))" title="Up">🔊</span>
-        <span class="volic" onclick="setVol(100)" title="Max">📢</span>
+        <img class="volic-img" id="MUTE_BTN" src="assets/pink/mute_button.png" alt="mute" onclick="setVol(0)" onerror="this.outerHTML='<span class=\'volic\' onclick=\'setVol(0)\'>🔇</span>'"/>
+        <img class="volic-img" src="assets/pink/volume_bar_low.png" alt="vol down" onclick="setVol(Math.max(0,curVol-10))" style="width:28px;" onerror="this.outerHTML='<span class=\'volic\' onclick=\'setVol(Math.max(0,curVol-10))\'>🔉</span>'"/>
+        <img class="volic-img" src="assets/pink/volume_bar_high.png" alt="vol up" onclick="setVol(Math.min(100,curVol+10))" style="width:28px;" onerror="this.outerHTML='<span class=\'volic\' onclick=\'setVol(Math.min(100,curVol+10))\'>🔊</span>'"/>
+        <img class="volic-img" src="assets/pink/volume_button.png" alt="max" onclick="setVol(100)" onerror="this.outerHTML='<span class=\'volic\' onclick=\'setVol(100)\'>📢</span>'"/>
       </div>
     </div>
+
     <div class="bhrow"><div class="bigh" id="BIGH" onclick="togLike()">♥</div></div>
   </div>
 </div>
@@ -296,72 +278,155 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
   }
 })();
 
+// Helper: safely encode audio path (handles spaces, Hindi chars, special symbols)
+function audioSrc(filename){ return 'audio/' + filename.split('').map(c => encodeURIComponent(c) === c ? c : encodeURIComponent(c)).join(''); }
+
 const TRACKS=[
-  {title:"Jeene Laga Hoon",    artist:"Atif Aslam & Shreya Ghoshal", file:"audio/ज_न__लग__ह___ब_ल_व_ड_स__ग_एल__ग_-_रम_म_य__व_स_त_व_य__-_ग_र_श_क_म_र__श_र_त__ह_सन_256k_.mp3", color:"pink",
-    lyrics:"Jeene lagaa hoon pehley se zyaadaa\nPehley se zyaadaa tumpey marney lagaa\n\nMain, meraa dil aur tum ho yahaan\nPhir kyoon ho palkein jhukaaye wahaan\nTumsaa haseen pehley dekhaa nahin\n\nChaltee hai saansein pehle se zyaadaa\nPehley se zyaadaa dil theherne lagaa\n\nTanhaaiyon mein tujhey dhoondhhe meraa dil\nMilney lagey dil pehley se zyaadaa\nPehley se zyaadaa ishq honey lagaa"},
-  {title:"Pehli Nazar Mein",   artist:"Atif Aslam & Pritam",         file:"audio/Pehli_Nazar_Mein_Kaise_Jaado_Kar_Diya___Atif_Aslam_Hits___Race_I_Akshaye__Bipasha___Saif_Ali_256k_.mp3", color:"blue",
-    lyrics:"Pehli nazar mein kaise jaado kar diya\nTera ban baita hai mera jiya\nJaane kya hoga kya pata\nIs pal ko milke aa jee le zara\n\nMein hoon yahan, Tu hai yahan\nMeri bahon mein aa, Aa bhi ja\nO jaan-e-jaan, Dono jahan\nMeri bahon mein aa, Bhool ja\n\nHar dua mein shamil tera pyaar hai\nBin tere lamha bhi dushwar hai"},
-  {title:"Tu Hi Mera",         artist:"Shafqat Amanat Ali & Pritam", file:"audio/Tu_Hi_Mera_-_Audio_Lyrical___Emraan_Hashmi__Esha_Gupta___Jannat_2___Shafqat_Amanat_Ali___Pritam_256k_.mp3", color:"purple",
-    lyrics:"Tere ishq mein, dooba rahe din raat yoon hi sada\nMere khwaab se aankhein teri, ik pal bhi na hoye juda\n\nTu hi mera, mera, mera...\nHai teri chahat, teri zaroorat\nSooni hai tujh bin, duniya meri\nHai meri jannat, galiyaan teri\n\nUmmeed yeh seene mein leke, main hoon jee raha\nKabhi tu mile, mujh se kahe ke, main hoon bas tera\nTu hi mera mera mera..."},
-  {title:"Tere Liye",          artist:"Atif Aslam",                  file:"audio/Tere_Liye__Jhankar__256k_.mp3", color:"pink",
-    lyrics:"Jaagi jaagi soyi na main saari raat, tere liye\nBheegi bheegi palkein meri udaas, tere liye\nAkhiyan bichayi main, tere liye\nDuniya bhulayi maine, tere liye\n\nTere liye jhoomu deewana ban ke tere liye\nVaada hai mera main hoon tere liye\n\nZara paas tu aa mere, dheere se choo ja mujhe\nKho jaaun tere pyaar mein, baahon mein bhar le mujhe"},
-  {title:"Sach Keh Raha Hai",  artist:"KK",                          file:"audio/Sach_Keh_Raha_Hai_Deewana___Rehnaa_Hai_Terre_Dil_Mein___R__Madhavan___Dia_Mirza___K_K_256k_.mp3", color:"blue",
-    lyrics:"Sach keh raha hai deewana\nDil dil na kisi se lagaana\n\nJhoothe hai yaar ke vaade saare\nJhoothi hai pyaar ki kasmein\nMaine har lamha jisse chaaha, jisse pooja\nUssi ne yaaron mera dil toda toda\nTanha tanha chhoda\n\nEk din usse bhoola doonga main\nUske nishaan mita doonga main"},
-  {title:"Vhalam Aavo Ne",     artist:"Jigardan Gadhavi & Sachin-Jigar", file:"audio/Vhalam_Aavo_Ne___Love_Ni_Bhavai___Sachin-Jigar___Jigardan_Gadhavi___Gujarati_Song_256k_.mp3", color:"purple",
-    lyrics:"Hu mane sodhya karu\nPan hu tane paamya karu\nTu lai ne Aave laagni no melo re\n\nVahalam... Aavo ne Aavo ne\nVahalam... Aavo ne Aavo ne\n\nMandi Che Love Ni Bhavai\nO ta thaiya Thaiya Ta Thaiya Thai\n\nRoj Rate Ke sawaare Chalta Farta\nHu ane Tara Vicharo Marta Gappa\nTari Bolati aakhon, Jane Kholti Vaato"},
-  {title:"Tu Hi Haqeeqat",     artist:"Javed Ali & Pritam",           file:"audio/Tu_Hi_Haqeeqat_-_Lyrical_Song___Tum_Mile___Emraan_Hashmi___Soha_Ali_Khan___Javed_Ali___Pritam_256k_.mp3", color:"pink",
-    lyrics:"Tu hi haqeeqat, baaki sab sapne\nMujhe hai teri zaroorat\nTu hi haqeeqat, baaki sab sapne\n\nBin tere jeena mushkil hai mera\nDil kehta hai, tu hi hai mera\nTu hi haqeeqat, tu hi hai meri duniya"},
-  {title:"Tu Hi Haqeeqat (Lyric)", artist:"Javed Ali & Pritam",      file:"audio/Tu_Hi_Haqeeqat_Lyric_Video_-_Tum_Mile_Emraan_Hashmi_Soha_Ali_Khan_Pritam_Javed_Ali_Shadab_256k_.mp3", color:"blue",
-    lyrics:"Tu hi haqeeqat, baaki sab sapne\nMujhe hai teri zaroorat\nTu hi haqeeqat, baaki sab sapne\n\nBin tere jeena mushkil hai mera\nDil kehta hai, tu hi hai mera\nTu hi haqeeqat, tu hi hai meri duniya"},
-  {title:"Zara Sa",            artist:"KK & Pritam",                  file:"audio/Zara_Sa_-_Full_Video___Jannat___Emraan_Hashmi__Sonal___KK___Pritam___Sayeed_Quadri___Mahesh_Bhatt_256k_.mp3", color:"purple",
-    lyrics:"Zara sa jhoom loon main\nAaj pehli baar dil ne\nYeh kaha hai\n\nHaan maine dil diya\nUsne dil liya\nAb toh yeh hi silsila hai\n\nZara sa jhoom loon main\nTeri aankhon mein khwab hain\nMere khwabon mein tu hai"},
-  {title:"Ye Tune Kya Kiya",   artist:"Shreya Ghoshal & Pritam",      file:"audio/Ye_Tune_Kya_Kiya_Song_Once_Upon_A_Time_In_Mumbaai_Dobara___Pritam___Akshay_Kumar__Sonakshi_Sinha_256k_.mp3", color:"pink",
-    lyrics:"Ye tune kya kiya\nJaane kab se dil mein tu samaa gayi\nYe tune kya kiya\n\nPehle nazron ne churaya\nPhir dil ne teri yaad ko basaya\nAb toh har pal tera hi khayaal hai\nYe tune kya kiya"},
+  {title:"Jeene Laga Hoon",
+   artist:"Atif Aslam & Shreya Ghoshal",
+   file:"audio/%E0%A4%9C_%E0%A4%A8__%E0%A4%B2%E0%A4%97__%E0%A4%B9___%E0%A4%AC_%E0%A4%B2_%E0%A4%B5_%E0%A4%A1_%E0%A4%B8___%E0%A4%97_%E0%A4%8F%E0%A4%B2__%E0%A4%97_-_%E0%A4%B0%E0%A4%AE_%E0%A4%AE_%E0%A4%AF__%E0%A4%B5_%E0%A4%B8_%E0%A4%A4_%E0%A4%B5_%E0%A4%AF__-_%E0%A4%97_%E0%A4%B0_%E0%A4%B6_%E0%A4%95_%E0%A4%AE_%E0%A4%B0__%E0%A4%B6_%E0%A4%B0_%E0%A4%A4__%E0%A4%B9_%E0%A4%B8%E0%A4%A8_256k_.mp3",
+   color:"pink",
+   lyrics:"Jeene lagaa hoon pehley se zyaadaa\nPehley se zyaadaa tumpey marney lagaa\n\nMain, meraa dil aur tum ho yahaan\nPhir kyoon ho palkein jhukaaye wahaan\nTumsaa haseen pehley dekhaa nahin\n\nChaltee hai saansein pehle se zyaadaa\nPehley se zyaadaa dil theherne lagaa"},
+  {title:"Pehli Nazar Mein",
+   artist:"Atif Aslam & Pritam",
+   file:"audio/Pehli_Nazar_Mein_Kaise_Jaado_Kar_Diya___Atif_Aslam_Hits___Race_I_Akshaye__Bipasha___Saif_Ali_256k_.mp3",
+   color:"blue",
+   lyrics:"Pehli nazar mein kaise jaado kar diya\nTera ban baita hai mera jiya\nJaane kya hoga kya pata\nIs pal ko milke aa jee le zara\n\nMein hoon yahan, Tu hai yahan\nMeri bahon mein aa, Aa bhi ja\nO jaan-e-jaan, Dono jahan\nMeri bahon mein aa, Bhool ja"},
+  {title:"Tu Hi Mera",
+   artist:"Shafqat Amanat Ali & Pritam",
+   file:"audio/Tu_Hi_Mera_-_Audio_Lyrical___Emraan_Hashmi__Esha_Gupta___Jannat_2___Shafqat_Amanat_Ali___Pritam_256k_.mp3",
+   color:"purple",
+   lyrics:"Tere ishq mein, dooba rahe din raat yoon hi sada\nMere khwaab se aankhein teri, ik pal bhi na hoye juda\n\nTu hi mera, mera, mera...\nHai teri chahat, teri zaroorat\nSooni hai tujh bin, duniya meri"},
+  {title:"Tere Liye",
+   artist:"Atif Aslam",
+   file:"audio/Tere_Liye__Jhankar__256k_.mp3",
+   color:"pink",
+   lyrics:"Jaagi jaagi soyi na main saari raat, tere liye\nBheegi bheegi palkein meri udaas, tere liye\nAkhiyan bichayi main, tere liye\nDuniya bhulayi maine, tere liye"},
+  {title:"Sach Keh Raha Hai",
+   artist:"KK",
+   file:"audio/Sach_Keh_Raha_Hai_Deewana___Rehnaa_Hai_Terre_Dil_Mein___R__Madhavan___Dia_Mirza___K_K_256k_.mp3",
+   color:"blue",
+   lyrics:"Sach keh raha hai deewana\nDil dil na kisi se lagaana\n\nJhoothe hai yaar ke vaade saare\nJhoothi hai pyaar ki kasmein"},
+  {title:"Vhalam Aavo Ne",
+   artist:"Jigardan Gadhavi & Sachin-Jigar",
+   file:"audio/Vhalam_Aavo_Ne___Love_Ni_Bhavai___Sachin-Jigar___Jigardan_Gadhavi___Gujarati_Song_256k_.mp3",
+   color:"purple",
+   lyrics:"Hu mane sodhya karu\nPan hu tane paamya karu\nTu lai ne Aave laagni no melo re\n\nVahalam... Aavo ne Aavo ne"},
+  {title:"Tu Hi Haqeeqat",
+   artist:"Javed Ali & Pritam",
+   file:"audio/Tu_Hi_Haqeeqat_-_Lyrical_Song___Tum_Mile___Emraan_Hashmi___Soha_Ali_Khan___Javed_Ali___Pritam_256k_.mp3",
+   color:"pink",
+   lyrics:"Tu hi haqeeqat, baaki sab sapne\nMujhe hai teri zaroorat\nTu hi haqeeqat, baaki sab sapne"},
+  {title:"Tu Hi Haqeeqat (Lyric)",
+   artist:"Javed Ali & Pritam",
+   file:"audio/Tu_Hi_Haqeeqat_Lyric_Video_-_Tum_Mile_Emraan_Hashmi_Soha_Ali_Khan_Pritam_Javed_Ali_Shadab_256k_.mp3",
+   color:"blue",
+   lyrics:"Tu hi haqeeqat, baaki sab sapne\nMujhe hai teri zaroorat\nTu hi haqeeqat, baaki sab sapne"},
+  {title:"Zara Sa",
+   artist:"KK & Pritam",
+   file:"audio/Zara_Sa_-_Full_Video___Jannat___Emraan_Hashmi__Sonal___KK___Pritam___Sayeed_Quadri___Mahesh_Bhatt_256k_.mp3",
+   color:"purple",
+   lyrics:"Zara sa jhoom loon main\nAaj pehli baar dil ne\nYeh kaha hai\n\nHaan maine dil diya\nUsne dil liya"},
+  {title:"Ye Tune Kya Kiya",
+   artist:"Shreya Ghoshal & Pritam",
+   file:"audio/Ye_Tune_Kya_Kiya_Song_Once_Upon_A_Time_In_Mumbaai_Dobara___Pritam___Akshay_Kumar__Sonakshi_Sinha_256k_.mp3",
+   color:"pink",
+   lyrics:"Ye tune kya kiya\nJaane kab se dil mein tu samaa gayi\nYe tune kya kiya"},
 ];
 
 const COLORS={
-  pink:  {pk:"#d4607a",pk2:"#f4a7b9",pk3:"#fce8ee",pk4:"#fdf6f8",vc:"#f4a7b9",nl:"#d4607a",t:["#f4a7b9","#e8789a","#f4bece"]},
-  blue:  {pk:"#5878d0",pk2:"#98b8f0",pk3:"#dce8fc",pk4:"#f0f4fd",vc:"#98b8f0",nl:"#5878d0",t:["#98b8f0","#5878d0","#b8d0f8"]},
-  purple:{pk:"#7858c0",pk2:"#b898f0",pk3:"#ece0fc",pk4:"#f5f0fd",vc:"#b898f0",nl:"#7858c0",t:["#b898f0","#7858c0","#ccb0f8"]},
+  pink:  {pk:"#d4607a",pk2:"#f4a7b9",pk3:"#fce8ee",pk4:"#fdf6f8",folder:"pink"},
+  blue:  {pk:"#5878d0",pk2:"#98b8f0",pk3:"#dce8fc",pk4:"#f0f4fd",folder:"blue"},
+  purple:{pk:"#7858c0",pk2:"#b898f0",pk3:"#ece0fc",pk4:"#f5f0fd",folder:"blue"}, // purple uses blue assets
 };
 
 let cur=0,playing=false,liked=false,curVol=80,dragP=false,dragV=false;
+let shuffleOn=false,repeatOn=false;
 const aud=document.getElementById('AUD');
 aud.volume=0.8;
 const $=id=>document.getElementById(id);
 
 function fmt(s){if(!s||isNaN(s)||!isFinite(s))return'0:00';const m=Math.floor(s/60),sc=Math.floor(s%60);return m+':'+(sc<10?'0':'')+sc;}
 
+// Switch all theme images to correct folder
 function applyC(key){
   const c=COLORS[key]||COLORS.pink;
   const r=document.documentElement.style;
   r.setProperty('--pk',c.pk);r.setProperty('--pk2',c.pk2);r.setProperty('--pk3',c.pk3);r.setProperty('--pk4',c.pk4);
-  const vl=$('VL');if(vl)vl.setAttribute('fill',c.vc);
-  const nl=$('NDL');if(nl)nl.setAttribute('fill',c.nl);
-  const d=$('DISP');if(d)d.setAttribute('fill',c.pk);
-  ['T1','T2','T3'].forEach((id,i)=>{const el=$(id);if(el)el.setAttribute('fill',c.t[i]);});
+
+  const f=c.folder;
+
+  // Update all button images to theme folder
+  const imgs={
+    SETBTN:`assets/${f}/settings.png`,
+    MINBTN:`assets/${f}/minimizer_button.png`,
+    WINBTN:`assets/${f}/window_button.png`,
+    EXITBTN:`assets/${f}/exit_button.png`,
+    AART_FRAME:`assets/${f}/album_frame.png`,
+    SHUF:`assets/${f}/shuffle_button.png`,
+    REP:`assets/${f}/repeat_button.png`,
+    PBAR_BG:`assets/${f}/progress_bar.png`,
+    VBAR_BG:`assets/${f}/volume_bar_low.png`,
+    MUTE_BTN:`assets/${f}/mute_button.png`,
+    PBTN_IMG: playing ? `assets/${f}/pause_button.png` : `assets/${f}/play_button.png`,
+  };
+  for(const[id,src]of Object.entries(imgs)){const el=$(id);if(el&&el.tagName==='IMG')el.src=src;}
+
+  // Update forward/back buttons (no IDs, select by alt text)
+  document.querySelectorAll('.cbtn-img').forEach(img=>{
+    if(img.alt==='prev') img.src=`assets/${f}/backwards_button.png`;
+    if(img.alt==='next') img.src=`assets/${f}/forwards_button.png`;
+  });
+  document.querySelectorAll('.volic-img').forEach(img=>{
+    if(img.alt==='vol down') img.src=`assets/${f}/volume_bar_low.png`;
+    if(img.alt==='vol up')   img.src=`assets/${f}/volume_bar_high.png`;
+    if(img.alt==='max')      img.src=`assets/${f}/volume_button.png`;
+  });
+
+  // Scene: pink=record_player (wide, transparent bg), blue/purple=frame (portrait card)
+  const sceneImg=$('SCENE_IMG');
+  const sceneEl=$('SCENE');
+  if(sceneImg){
+    if(f==='pink'){
+      sceneImg.src='assets/pink/record_player.png';
+      sceneImg.classList.remove('frame-mode');
+      if(sceneEl) sceneEl.style.background='#2e1838';
+    } else {
+      sceneImg.src=`assets/${f}/frame.png`;
+      sceneImg.classList.add('frame-mode');
+      if(sceneEl) sceneEl.style.background='#0d1f2e';
+    }
+    sceneImg.style.opacity='0';
+    sceneImg.onload = ()=>{ sceneImg.style.opacity='1'; };
+    // If image already cached, onload won't fire — force it
+    if(sceneImg.complete) sceneImg.style.opacity='1';
+  }
 }
 
 function loadT(idx,auto=false){
   cur=((idx%TRACKS.length)+TRACKS.length)%TRACKS.length;
   const t=TRACKS[cur];
   applyC(t.color||'pink');
-  const vg=$('VG');vg.style.opacity='0';setTimeout(()=>vg.style.opacity='1',340);
+
   const tn=$('TNAME');tn.textContent=t.title;tn.classList.toggle('mq',t.title.length>16);
   $('TART').textContent=t.artist;
-  $('AART').innerHTML='♪';
   $('ltitle').textContent=t.title+' — '+t.artist;
   $('lbox').textContent=t.lyrics||'Lyrics not available.';
   $('PFILL').style.width='0%';$('CT').textContent='0:00';$('TT').textContent='0:00';
-  aud.src=t.file;aud.load();
+
+  // Use the file path directly — already URL-encoded where needed
+  aud.src=t.file;
+  aud.load();
   if(auto||playing){aud.play().then(()=>setPlay(true)).catch(e=>console.warn('Audio error:',e));}
   renderPL();
 }
 
 function setPlay(s){
   playing=s;
-  $('PBTN').textContent=s?'⏸':'▶';$('PBTN').style.fontSize=s?'18px':'20px';
-  $('VG').classList.toggle('sp',s);$('TA').classList.toggle('pl',s);
+  const c=COLORS[TRACKS[cur].color||'pink'];
+  const f=c.folder;
+  const pb=$('PBTN_IMG');
+  if(pb) pb.src=s?`assets/${f}/pause_button.png`:`assets/${f}/play_button.png`;
   renderPL();
 }
 
@@ -376,13 +441,34 @@ function togPlay(){
 function prevT(){loadT(cur-1,playing);}
 function nextT(){loadT(cur+1,playing);}
 
+function togShuffle(){
+  shuffleOn=!shuffleOn;
+  $('SHUF').classList.toggle('on',shuffleOn);
+}
+function togRepeat(){
+  repeatOn=!repeatOn;
+  aud.loop=repeatOn;
+  $('REP').classList.toggle('on',repeatOn);
+}
+
 aud.addEventListener('timeupdate',()=>{
   if(dragP||!aud.duration)return;
   const p=(aud.currentTime/aud.duration)*100;
   $('PFILL').style.width=p+'%';$('CT').textContent=fmt(aud.currentTime);
 });
 aud.addEventListener('loadedmetadata',()=>$('TT').textContent=fmt(aud.duration));
-aud.addEventListener('ended',()=>nextT());
+aud.addEventListener('error',()=>{
+  const codes={1:'ABORTED',2:'NETWORK',3:'DECODE',4:'NOT_SUPPORTED'};
+  const code=aud.error?aud.error.code:0;
+  console.error(`❌ Audio failed [${codes[code]||code}]: ${aud.src}`);
+  $('TART').textContent='⚠️ audio error — check console';
+});
+aud.addEventListener('ended',()=>{
+  if(!repeatOn){
+    if(shuffleOn){loadT(Math.floor(Math.random()*TRACKS.length),true);}
+    else nextT();
+  }
+});
 
 // Progress drag
 const pb=$('PBAR');
@@ -402,6 +488,10 @@ function setVol(v){
   $('VOLNUM').textContent=curVol+'%';
   $('VFILL').style.width=curVol+'%';
   $('VTHMB').style.left=`calc(${curVol}% - 9px)`;
+  // swap volume bar image
+  const c=COLORS[TRACKS[cur].color||'pink'];
+  const vbg=$('VBAR_BG');
+  if(vbg) vbg.src=`assets/${c.folder}/${curVol>50?'volume_bar_high':'volume_bar_low'}.png`;
 }
 function volClick(e){const r=$('VBAR').getBoundingClientRect();setVol(((e.clientX-r.left)/r.width)*100);}
 $('VTHMB').addEventListener('mousedown',e=>{dragV=true;e.preventDefault();});
@@ -411,7 +501,14 @@ document.addEventListener('touchmove',e=>{if(!dragV)return;const r=$('VBAR').get
 document.addEventListener('mouseup',()=>dragV=false);
 document.addEventListener('touchend',()=>dragV=false);
 
-function togLike(){liked=!liked;const b=$('BIGH');b.style.color=liked?'#ff2266':'var(--pk)';b.style.transform=liked?'scale(1.3) rotate(-10deg)':'scale(1)';}
+function togLike(){
+  liked=!liked;
+  const b=$('BIGH');
+  b.style.color=liked?'#ff2266':'var(--pk)';
+  b.style.transform=liked?'scale(1.3) rotate(-10deg)':'scale(1)';
+  // pulse animation
+  b.style.transition='all .2s';
+}
 
 function togS(){$('spanel').classList.toggle('open');renderPL();}
 document.addEventListener('click',e=>{if(!e.target.closest('.wbtns'))$('spanel').classList.remove('open');});
@@ -420,6 +517,7 @@ function setTheme(t){
   $('btnPk').classList.toggle('on',t==='pink');
   $('btnBl').classList.toggle('on',t==='blue');
   $('btnPu').classList.toggle('on',t==='purple');
+  // re-apply current track color with new theme preference
   applyC(t);
 }
 
