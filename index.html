@@ -1,3 +1,6 @@
+bash
+
+cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,19 +11,39 @@
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-:root{--pk:#d4607a;--pk2:#f4a7b9;--pk3:#fce8ee;--pk4:#fdf6f8;--tx:#4a2535;--tx2:#8a6070;}
-body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 10px 28px;flex-direction:column;}
+:root{
+  --pk:#d4607a;--pk2:#f4a7b9;--pk3:#fce8ee;--pk4:#fdf6f8;
+  --tx:#4a2535;--tx2:#8a6070;
+  --bg:#18091f;
+}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--bg);
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  padding:48px 10px 28px;
+  flex-direction:column;
+}
 
 /* STARS */
 .stars{position:fixed;inset:0;pointer-events:none;z-index:0;}
-.star{position:absolute;background:#fff;border-radius:50%;animation:tw var(--d,2s) var(--dl,0s) infinite;}
-@keyframes tw{0%,100%{opacity:.1;}50%{opacity:.85;}}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle var(--d,2s) var(--dl,0s) infinite;}
+@keyframes twinkle{0%,100%{opacity:.1;}50%{opacity:.85;}}
 
-/* WINDOW */
-.win{position:relative;z-index:2;width:400px;max-width:95vw;background:var(--pk4);border:2.5px solid var(--pk2);border-radius:14px;box-shadow:4px 4px 0 var(--pk),0 0 0 1px rgba(255,255,255,.12),0 16px 48px rgba(180,60,100,.4);margin-top:30px;}
+/* MAIN WINDOW */
+.win{
+  position:relative;z-index:2;
+  width:380px;max-width:95vw;
+  background:var(--pk4);
+  border:2.5px solid var(--pk2);
+  border-radius:16px;
+  box-shadow:4px 4px 0 var(--pk),0 0 0 1px rgba(255,255,255,.1),0 20px 60px rgba(0,0,0,.5);
+  overflow:hidden;
+  margin-top:30px;
+}
 
-/* BOW */
-.bow{position:absolute;top:-30px;left:50%;transform:translateX(-50%);width:64px;height:30px;z-index:10;}
+/* BOW on top */
+.bow{position:absolute;top:-28px;left:50%;transform:translateX(-50%);width:64px;height:30px;z-index:10;pointer-events:none;}
 .bwl,.bwr{position:absolute;top:4px;width:26px;height:20px;background:var(--pk2);border:2px solid var(--pk);}
 .bwl{left:0;border-radius:50% 30% 50% 30%;transform:rotate(-22deg);transform-origin:right center;}
 .bwr{right:0;border-radius:30% 50% 30% 50%;transform:rotate(22deg);transform-origin:left center;}
@@ -29,35 +52,39 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
 .bwrl{left:50%;margin-left:-6px;transform:rotate(-12deg);}
 .bwrr{left:50%;margin-left:1px;transform:rotate(12deg);}
 
-/* HEARTS */
-.ch{position:absolute;font-size:15px;color:var(--pk2);}
-.ch.tl{top:-2px;left:8px;}.ch.tr{top:-2px;right:8px;}
-.ch.bl{bottom:-2px;left:8px;}.ch.br{bottom:-2px;right:8px;}
-.ch.ml{top:50%;left:-5px;transform:translateY(-50%);}
-.ch.mr{top:50%;right:-5px;transform:translateY(-50%);}
-
 /* TITLEBAR */
-.tbar{background:var(--pk3);border-radius:12px 12px 0 0;padding:8px 12px;display:flex;align-items:center;justify-content:space-between;border-bottom:2px solid var(--pk2);}
-.ttx{font-family:'Caveat',cursive;font-size:19px;color:var(--tx);}
-.wbtns{display:flex;gap:4px;align-items:center;position:relative;}
+.tbar{
+  background:var(--pk3);
+  padding:7px 10px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:2px solid var(--pk2);
+}
+.ttx{font-family:'Caveat',cursive;font-size:18px;color:var(--tx);letter-spacing:.5px;}
+.wbtns{display:flex;gap:5px;align-items:center;position:relative;}
+.tbtn{width:22px;height:22px;cursor:pointer;object-fit:contain;transition:transform .15s,filter .12s;}
+.tbtn:hover{transform:scale(1.12);filter:brightness(1.1);}
+.settings-btn{transition:transform .35s;}
+.settings-btn:hover{transform:rotate(90deg)!important;}
 
-/* Window control buttons using images */
-.winb-img{width:22px;height:22px;cursor:pointer;object-fit:contain;transition:transform .15s;}
-.winb-img:hover{transform:scale(1.15);}
-.gbtn-img{width:22px;height:22px;cursor:pointer;object-fit:contain;transition:transform .35s;border:none;background:none;padding:0;}
-.gbtn-img:hover{transform:rotate(90deg);}
-
-/* SETTINGS */
-.spanel{position:absolute;top:34px;right:0;z-index:999;width:215px;background:#1a0c2a;color:#fff;border-radius:10px;padding:14px;display:none;box-shadow:0 8px 32px rgba(0,0,0,.75);border:1px solid rgba(255,255,255,.1);max-height:78vh;overflow-y:auto;}
+/* SETTINGS PANEL */
+.spanel{
+  position:absolute;top:36px;right:0;z-index:999;
+  width:210px;background:#1a0c2a;color:#fff;
+  border-radius:10px;padding:13px;
+  display:none;
+  box-shadow:0 8px 32px rgba(0,0,0,.75);
+  border:1px solid rgba(255,255,255,.1);
+  max-height:75vh;overflow-y:auto;
+}
 .spanel.open{display:block;}
 .spanel::-webkit-scrollbar{width:3px;}
 .spanel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);}
-.sh4{font-size:9px;color:rgba(255,255,255,.38);letter-spacing:2px;text-transform:lowercase;margin:10px 0 6px;}
+.sh4{font-size:9px;color:rgba(255,255,255,.38);letter-spacing:2px;text-transform:lowercase;margin:10px 0 5px;}
 .sh4:first-child{margin-top:0;}
-.srow{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap;}
-.sbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:5px;padding:4px 12px;font-size:11px;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
+.srow{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap;}
+.sbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);color:#fff;border-radius:5px;padding:4px 11px;font-size:11px;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
 .sbtn:hover,.sbtn.on{background:var(--pk);border-color:var(--pk);}
-.spl{max-height:130px;overflow-y:auto;}
+.spl{max-height:120px;overflow-y:auto;}
 .spl::-webkit-scrollbar{width:3px;}
 .spl::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);}
 .spi{padding:5px 6px;border-radius:5px;cursor:pointer;font-size:11px;color:rgba(255,255,255,.6);display:flex;gap:6px;align-items:center;white-space:nowrap;overflow:hidden;transition:background .1s;}
@@ -65,109 +92,152 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
 .spi.on{background:rgba(212,96,122,.28);color:#fff;}
 .snum{color:rgba(255,255,255,.22);min-width:14px;font-size:10px;}
 .stx{flex:1;overflow:hidden;text-overflow:ellipsis;}
-.seq{color:var(--pk2);animation:tw .5s steps(2) infinite;}
-
-/* Lyrics */
-.lbox{background:rgba(0,0,0,.28);border-radius:7px;padding:10px;max-height:160px;overflow-y:auto;font-size:11px;line-height:1.9;color:rgba(255,255,255,.72);white-space:pre-wrap;font-family:'Nunito',sans-serif;}
+.seq{color:var(--pk2);animation:twinkle .5s steps(2) infinite;}
+.lbox{background:rgba(0,0,0,.28);border-radius:7px;padding:9px;max-height:140px;overflow-y:auto;font-size:11px;line-height:1.9;color:rgba(255,255,255,.72);white-space:pre-wrap;}
 .lbox::-webkit-scrollbar{width:3px;}
 .lbox::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);}
-.ltitle{font-size:12px;color:var(--pk2);font-weight:700;margin-bottom:5px;}
+.ltitle{font-size:11px;color:var(--pk2);font-weight:700;margin-bottom:4px;}
 
-/* SCENE */
-.scene{position:relative;width:100%;border-bottom:2px solid var(--pk2);overflow:hidden;background:#2e1838;height:200px;display:flex;align-items:center;justify-content:center;transition:background 0.4s;}
-/* Pink: record player — centred, natural size, transparent bg */
-.scene-img{display:block;max-height:180px;max-width:88%;object-fit:contain;opacity:1;transition:opacity 0.3s ease;}
-/* Blue/purple: portrait card — narrower */
-.scene-img.frame-mode{max-height:190px;max-width:50%;}
+/* ═══════════════════════════════════════
+   SCENE — full-width record player image
+   ═══════════════════════════════════════ */
+.scene{
+  position:relative;
+  width:100%;
+  background:#1a0a28;
+  border-bottom:2px solid var(--pk2);
+  overflow:hidden;
+  /* height set by JS based on image */
+  min-height:160px;
+  display:flex;align-items:center;justify-content:center;
+  transition:background .4s;
+}
+/* The full background scene image — fills width */
+#SCENE_BG{
+  width:100%;
+  height:auto;
+  display:block;
+  object-fit:cover;
+  opacity:1;
+  transition:opacity .3s;
+}
+/* frame.png (blue) is portrait — centre it instead */
+#SCENE_BG.portrait{
+  width:auto;
+  height:200px;
+  display:block;
+}
 
-/* BOTTOM */
-.bpanel{background:var(--pk4);padding:14px 16px 16px;border-radius:0 0 12px 12px;position:relative;}
-.bch-tl{position:absolute;top:7px;left:9px;font-size:13px;color:var(--pk2);opacity:.65;}
-.bch-tr{position:absolute;top:7px;right:9px;font-size:13px;color:var(--pk2);opacity:.65;}
+/* ═══════════════════════════════════════
+   BOTTOM PANEL
+   ═══════════════════════════════════════ */
+.bpanel{
+  background:var(--pk4);
+  padding:12px 14px 14px;
+  border-radius:0 0 14px 14px;
+}
 
-/* NOW PLAYING — album frame image */
-.nprow{display:flex;align-items:center;gap:11px;margin-bottom:13px;padding-top:4px;}
-.aart{width:58px;height:58px;flex-shrink:0;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;background:var(--pk3);}
-.aart-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;z-index:2;pointer-events:none;}
-.aart-inner{width:100%;height:100%;object-fit:cover;z-index:1;display:block;}
+/* NOW PLAYING ROW */
+.nprow{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+.aart{
+  width:54px;height:54px;flex-shrink:0;
+  border-radius:8px;
+  border:2px solid var(--pk2);
+  background:var(--pk3);
+  overflow:hidden;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+  position:relative;
+}
+.aart img.frame-overlay{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:fill;z-index:2;pointer-events:none;
+}
 .tdet{flex:1;overflow:hidden;}
-.npl{font-family:'Caveat',cursive;font-size:13px;color:var(--tx2);font-style:italic;}
+.npl{font-family:'Caveat',cursive;font-size:12px;color:var(--tx2);font-style:italic;}
 .tnw{overflow:hidden;}
-.tnm{font-family:'Caveat',cursive;font-size:23px;font-weight:700;color:var(--tx);white-space:nowrap;display:inline-block;}
-.tnm.mq{animation:mq 10s linear infinite;}
-@keyframes mq{0%{transform:translateX(110%);}100%{transform:translateX(-110%);}}
-.tart{font-size:12px;color:var(--tx2);margin-top:1px;}
+.tnm{font-family:'Caveat',cursive;font-size:21px;font-weight:700;color:var(--tx);white-space:nowrap;display:inline-block;}
+.tnm.mq{animation:marquee 10s linear infinite;}
+@keyframes marquee{0%{transform:translateX(105%);}100%{transform:translateX(-105%);}}
+.tart{font-size:11px;color:var(--tx2);margin-top:1px;}
 
-/* CONTROLS — image buttons */
-.ctrls{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:13px;}
-.cbtn-img{width:52px;height:40px;object-fit:contain;cursor:pointer;transition:transform .12s,filter .12s;}
-.cbtn-img:hover{transform:translateY(-2px);filter:brightness(1.15);}
-.cbtn-img:active{transform:translateY(2px);filter:brightness(.9);}
-.cbtn-img.play{width:60px;height:44px;}
+/* SHUFFLE / REPEAT */
+.extra-row{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:8px;}
+.xbtn{width:26px;height:26px;object-fit:contain;cursor:pointer;opacity:.55;transition:opacity .15s,transform .15s;}
+.xbtn:hover{opacity:1;transform:scale(1.12);}
+.xbtn.on{opacity:1;filter:drop-shadow(0 0 4px var(--pk));}
 
-/* PROGRESS — image progress bar */
-.prog{margin-bottom:11px;}
-.prow{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-.pstar-img{width:22px;height:22px;object-fit:contain;flex-shrink:0;cursor:pointer;transition:transform .2s;}
-.pstar-img:hover{transform:scale(1.2);}
-.pbar-wrap{flex:1;position:relative;height:20px;display:flex;align-items:center;}
-.pbar-bg{position:absolute;left:0;top:50%;transform:translateY(-50%);width:100%;height:14px;object-fit:fill;pointer-events:none;border-radius:4px;}
-.pbar{flex:1;height:14px;background:transparent;border-radius:4px;cursor:pointer;position:relative;user-select:none;}
-.pfill{height:100%;background:linear-gradient(90deg,var(--pk),var(--pk2));border-radius:4px;width:0%;pointer-events:none;position:relative;opacity:.7;}
-.pthumb{position:absolute;right:-8px;top:50%;transform:translateY(-50%);width:15px;height:15px;background:var(--pk);border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 6px rgba(212,96,122,.6);cursor:grab;}
-.trow{display:flex;justify-content:space-between;font-size:12px;color:var(--tx2);font-family:monospace;padding:0 3px;}
+/* CONTROLS */
+.ctrls{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:10px;}
+.cbtn{
+  height:40px;object-fit:contain;cursor:pointer;
+  transition:transform .12s,filter .12s;
+}
+.cbtn:hover{transform:translateY(-2px);filter:brightness(1.15);}
+.cbtn:active{transform:translateY(2px);filter:brightness(.9);}
+.cbtn.play{height:46px;}
 
-/* VOLUME — image volume bar */
-.volwrap{margin-bottom:12px;}
-.voltop{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
-.vollbl{font-size:11px;color:var(--tx2);font-weight:600;letter-spacing:.5px;}
-.volnum{font-size:11px;color:var(--pk);font-weight:700;font-family:monospace;background:rgba(212,96,122,.1);border:1px solid var(--pk2);border-radius:10px;padding:1px 8px;}
-.voltrack{position:relative;height:22px;display:flex;align-items:center;}
-.volempty{flex:1;height:14px;background:transparent;border-radius:3px;position:relative;cursor:pointer;}
-.vol-bg{position:absolute;left:0;top:50%;transform:translateY(-50%);width:100%;height:14px;object-fit:fill;pointer-events:none;border-radius:3px;}
-.volfill{height:100%;background:linear-gradient(90deg,var(--pk),var(--pk2));border-radius:3px;width:80%;pointer-events:none;opacity:.7;}
-.volthumb{position:absolute;top:50%;transform:translateY(-50%);width:18px;height:18px;background:var(--pk);border:3px solid #fff;border-radius:50%;box-shadow:0 0 8px rgba(212,96,122,.55);cursor:grab;left:calc(80% - 9px);}
+/* PROGRESS */
+.prog{margin-bottom:9px;}
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.pbar-wrap{flex:1;position:relative;height:16px;display:flex;align-items:center;cursor:pointer;}
+.pbar-bg{
+  position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:100%;height:10px;
+  object-fit:fill;pointer-events:none;border-radius:5px;
+}
+.pbar{
+  position:absolute;left:0;top:50%;transform:translateY(-50%);
+  width:100%;height:10px;
+  background:transparent;border-radius:5px;
+  cursor:pointer;user-select:none;
+}
+.pfill{height:100%;background:linear-gradient(90deg,var(--pk),var(--pk2));border-radius:5px;width:0%;position:relative;opacity:.75;}
+.pthumb{
+  position:absolute;right:-7px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;
+  background:var(--pk);border:2.5px solid #fff;border-radius:50%;
+  box-shadow:0 0 6px rgba(212,96,122,.6);cursor:grab;
+}
+.trow{display:flex;justify-content:space-between;font-size:11px;color:var(--tx2);font-family:monospace;padding:0 2px;}
+
+/* VOLUME */
+.volwrap{margin-bottom:10px;}
+.voltop{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.vollbl{font-size:10px;color:var(--tx2);font-weight:600;letter-spacing:.5px;}
+.volnum{font-size:10px;color:var(--pk);font-weight:700;font-family:monospace;background:rgba(212,96,122,.1);border:1px solid var(--pk2);border-radius:8px;padding:1px 7px;}
+.voltrack{position:relative;height:20px;display:flex;align-items:center;gap:8px;}
+.vmute{width:20px;height:20px;object-fit:contain;cursor:pointer;opacity:.7;transition:opacity .15s;}
+.vmute:hover{opacity:1;}
+.volempty{flex:1;height:10px;background:transparent;border-radius:4px;position:relative;cursor:pointer;}
+.vol-bg{position:absolute;left:0;top:50%;transform:translateY(-50%);width:100%;height:10px;object-fit:fill;pointer-events:none;border-radius:4px;}
+.volfill{height:100%;background:linear-gradient(90deg,var(--pk),var(--pk2));border-radius:4px;width:80%;opacity:.75;}
+.volthumb{position:absolute;top:50%;transform:translateY(-50%);width:16px;height:16px;background:var(--pk);border:2.5px solid #fff;border-radius:50%;box-shadow:0 0 7px rgba(212,96,122,.55);cursor:grab;left:calc(80% - 8px);}
 .volthumb:hover{transform:translateY(-50%) scale(1.15);}
-.volicons{display:flex;justify-content:space-between;align-items:center;margin-top:5px;padding:0 1px;}
-.volic-img{width:24px;height:24px;object-fit:contain;cursor:pointer;transition:transform .15s,filter .15s;opacity:.75;}
-.volic-img:hover{transform:scale(1.15);opacity:1;}
-/* fallback emoji icons for extra vol buttons */
-.volic{font-size:16px;cursor:pointer;color:var(--tx2);transition:all .15s;padding:2px 4px;border-radius:4px;}
-.volic:hover{color:var(--pk);background:rgba(212,96,122,.1);}
+.vhigh{width:20px;height:20px;object-fit:contain;cursor:pointer;opacity:.7;transition:opacity .15s;}
+.vhigh:hover{opacity:1;}
 
 /* HEART */
-.bhrow{display:flex;justify-content:center;margin-top:4px;}
-.bigh{font-size:28px;color:var(--pk);cursor:pointer;transition:all .2s;filter:drop-shadow(0 2px 8px rgba(212,96,122,.5));line-height:1;}
+.bhrow{display:flex;justify-content:center;margin-top:2px;}
+.bigh{font-size:26px;color:var(--pk);cursor:pointer;transition:all .2s;filter:drop-shadow(0 2px 8px rgba(212,96,122,.5));line-height:1;}
 .bigh:hover{transform:scale(1.18);}
-
-/* shuffle / repeat row */
-.extra-row{display:flex;align-items:center;justify-content:center;gap:18px;margin-bottom:10px;}
-.extra-btn{width:28px;height:28px;object-fit:contain;cursor:pointer;opacity:.6;transition:opacity .15s,transform .15s;}
-.extra-btn:hover{opacity:1;transform:scale(1.12);}
-.extra-btn.on{opacity:1;filter:drop-shadow(0 0 4px var(--pk));}
 </style>
 </head>
 <body>
 <div class="stars" id="stars"></div>
 
 <div class="win">
+  <!-- BOW -->
   <div class="bow"><div class="bwl"></div><div class="bwr"></div><div class="bwc"></div><div class="bwrl"></div><div class="bwrr"></div></div>
-  <div class="ch tl">♥</div><div class="ch tr">♥</div>
-  <div class="ch bl">♥</div><div class="ch br">♥</div>
-  <div class="ch ml">♥</div><div class="ch mr">♥</div>
 
+  <!-- TITLEBAR -->
   <div class="tbar">
     <span class="ttx">h3ll player</span>
     <div class="wbtns">
-      <!-- Settings button uses settings.png -->
-      <button class="gbtn-img" onclick="togS()" title="Settings" style="background:none;border:none;cursor:pointer;">
-        <img id="SETBTN" src="assets/pink/settings.png" alt="settings" style="width:22px;height:22px;object-fit:contain;transition:transform .35s;" onmouseover="this.style.transform='rotate(90deg)'" onmouseout="this.style.transform='rotate(0deg)'"/>
-      </button>
-      <!-- Window buttons: minimize, maximize, exit -->
-      <img id="MINBTN" class="winb-img" src="assets/pink/minimizer_button.png" alt="minimize" title="Minimize"/>
-      <img id="WINBTN" class="winb-img" src="assets/pink/window_button.png" alt="maximize" title="Maximize"/>
-      <img id="EXITBTN" class="winb-img" src="assets/pink/exit_button.png" alt="close" title="Close"/>
-
+      <img id="SETBTN" class="tbtn settings-btn" src="assets/pink/settings.png" alt="settings" onclick="togS()"/>
+      <img id="MINBTN" class="tbtn" src="assets/pink/minimizer_button.png" alt="min"/>
+      <img id="WINBTN" class="tbtn" src="assets/pink/window_button.png" alt="max"/>
+      <img id="EXITBTN" class="tbtn" src="assets/pink/exit_button.png" alt="close"/>
       <div class="spanel" id="spanel">
         <div class="sh4">theme</div>
         <div class="srow">
@@ -184,22 +254,19 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
     </div>
   </div>
 
-  <!-- SCENE: uses record_player.png for pink, frame.png for blue/purple -->
+  <!-- SCENE: full-width image -->
   <div class="scene" id="SCENE">
-    <img id="SCENE_IMG" class="scene-img" src="assets/pink/record_player.png"
-         style="opacity:1;transition:opacity 0.3s;"
-         alt="player scene"/>
+    <img id="SCENE_BG" src="assets/pink/record_player.png" alt="scene"/>
   </div>
 
   <!-- BOTTOM PANEL -->
   <div class="bpanel">
-    <div class="bch-tl">♥</div><div class="bch-tr">♥</div>
 
-    <!-- NOW PLAYING: album_frame.png as overlay frame -->
+    <!-- NOW PLAYING -->
     <div class="nprow">
       <div class="aart" id="AART">
-        <span id="AART_FALLBACK" style="font-size:24px;z-index:1;">♪</span>
-        <img id="AART_FRAME" class="aart-frame" src="assets/pink/album_frame.png" alt="" onerror="this.style.display='none'"/>
+        <span id="AART_NOTE">♪</span>
+        <img id="AART_FRAME" class="frame-overlay" src="assets/pink/album_frame.png" alt="" onerror="this.style.display='none'"/>
       </div>
       <div class="tdet">
         <div class="npl">now playing...</div>
@@ -210,26 +277,23 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
 
     <!-- SHUFFLE / REPEAT -->
     <div class="extra-row">
-      <img id="SHUF" class="extra-btn" src="assets/pink/shuffle_button.png" alt="shuffle" title="Shuffle" onclick="togShuffle()" onerror="this.style.display='none'"/>
-      <img id="REP"  class="extra-btn" src="assets/pink/repeat_button.png"  alt="repeat"  title="Repeat"  onclick="togRepeat()"  onerror="this.style.display='none'"/>
+      <img id="SHUF" class="xbtn" src="assets/pink/shuffle_button.png" alt="shuffle" onclick="togShuffle()" onerror="this.style.display='none'"/>
+      <img id="REP"  class="xbtn" src="assets/pink/repeat_button.png"  alt="repeat"  onclick="togRepeat()"  onerror="this.style.display='none'"/>
     </div>
 
-    <!-- CONTROLS: backwards, play/pause, forwards -->
+    <!-- CONTROLS -->
     <div class="ctrls">
-      <img class="cbtn-img" src="assets/pink/backwards_button.png" alt="prev" onclick="prevT()" onerror="this.outerHTML='<button class=\'cbtn\' onclick=\'prevT()\'>◄◄</button>'"/>
-      <img class="cbtn-img play" id="PBTN_IMG" src="assets/pink/play_button.png" alt="play/pause" onclick="togPlay()" onerror="this.outerHTML='<button class=\'cbtn play\' id=\'PBTN\' onclick=\'togPlay()\'>▶</button>'"/>
-      <img class="cbtn-img" src="assets/pink/forwards_button.png" alt="next" onclick="nextT()" onerror="this.outerHTML='<button class=\'cbtn\' onclick=\'nextT()\'>▶▶</button>'"/>
+      <img class="cbtn" id="PREVBTN" src="assets/pink/backwards_button.png" alt="prev" onclick="prevT()"/>
+      <img class="cbtn play" id="PBTN" src="assets/pink/play_button.png" alt="play" onclick="togPlay()"/>
+      <img class="cbtn" id="NEXTBTN" src="assets/pink/forwards_button.png" alt="next" onclick="nextT()"/>
     </div>
 
-    <!-- PROGRESS BAR: progress_bar.png as background, star.png as icon -->
+    <!-- PROGRESS -->
     <div class="prog">
       <div class="prow">
-        <img id="STAR_IMG" class="pstar-img" src="assets/pink/progress_bar.png"
-             style="width:22px;height:22px;border-radius:50%;object-fit:cover;"
-             onerror="this.outerHTML='<span class=\'pstar\'>⭐</span>'" alt="star" onclick="togLike()"/>
-        <div class="pbar-wrap">
+        <div class="pbar-wrap" id="PBAR">
           <img class="pbar-bg" id="PBAR_BG" src="assets/pink/progress_bar.png" alt="" onerror="this.style.display='none'"/>
-          <div class="pbar" id="PBAR">
+          <div class="pbar" id="PBAR_INNER">
             <div class="pfill" id="PFILL">
               <div class="pthumb" id="PTHMB"></div>
             </div>
@@ -239,24 +303,20 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
       <div class="trow"><span id="CT">0:00</span><span id="TT">0:00</span></div>
     </div>
 
-    <!-- VOLUME: volume_bar images + mute/volume buttons -->
+    <!-- VOLUME -->
     <div class="volwrap">
       <div class="voltop">
         <span class="vollbl">🎵 VOLUME</span>
         <span class="volnum" id="VOLNUM">80%</span>
       </div>
       <div class="voltrack">
+        <img class="vmute" id="MUTE_IMG" src="assets/pink/mute_button.png" alt="mute" onclick="setVol(0)" onerror="this.outerHTML='<span style=\'cursor:pointer;font-size:16px;\' onclick=\'setVol(0)\'>🔇</span>'"/>
         <div class="volempty" id="VBAR" onclick="volClick(event)">
-          <img class="vol-bg" id="VBAR_BG" src="assets/pink/volume_bar_low.png" alt="" onerror="this.style.display='none'"/>
+          <img class="vol-bg" id="VBARBG" src="assets/pink/volume_bar_low.png" alt="" onerror="this.style.display='none'"/>
           <div class="volfill" id="VFILL"></div>
+          <div class="volthumb" id="VTHMB"></div>
         </div>
-        <div class="volthumb" id="VTHMB"></div>
-      </div>
-      <div class="volicons">
-        <img class="volic-img" id="MUTE_BTN" src="assets/pink/mute_button.png" alt="mute" onclick="setVol(0)" onerror="this.outerHTML='<span class=\'volic\' onclick=\'setVol(0)\'>🔇</span>'"/>
-        <img class="volic-img" src="assets/pink/volume_bar_low.png" alt="vol down" onclick="setVol(Math.max(0,curVol-10))" style="width:28px;" onerror="this.outerHTML='<span class=\'volic\' onclick=\'setVol(Math.max(0,curVol-10))\'>🔉</span>'"/>
-        <img class="volic-img" src="assets/pink/volume_bar_high.png" alt="vol up" onclick="setVol(Math.min(100,curVol+10))" style="width:28px;" onerror="this.outerHTML='<span class=\'volic\' onclick=\'setVol(Math.min(100,curVol+10))\'>🔊</span>'"/>
-        <img class="volic-img" src="assets/pink/volume_button.png" alt="max" onclick="setVol(100)" onerror="this.outerHTML='<span class=\'volic\' onclick=\'setVol(100)\'>📢</span>'"/>
+        <img class="vhigh" id="VHIGH_IMG" src="assets/pink/volume_bar_high.png" alt="max" onclick="setVol(100)" onerror="this.outerHTML='<span style=\'cursor:pointer;font-size:16px;\' onclick=\'setVol(100)\'>🔊</span>'"/>
       </div>
     </div>
 
@@ -267,7 +327,7 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
 <audio id="AUD"></audio>
 
 <script>
-// Stars
+// ─── Stars ───────────────────────────────────────────────
 (()=>{
   const c=document.getElementById('stars');
   for(let i=0;i<100;i++){
@@ -278,30 +338,28 @@ body{font-family:'Nunito',sans-serif;background:#18091f;min-height:100vh;display
   }
 })();
 
-// Helper: safely encode audio path (handles spaces, Hindi chars, special symbols)
-function audioSrc(filename){ return 'audio/' + filename.split('').map(c => encodeURIComponent(c) === c ? c : encodeURIComponent(c)).join(''); }
-
+// ─── Tracks ──────────────────────────────────────────────
 const TRACKS=[
   {title:"Jeene Laga Hoon",
    artist:"Atif Aslam & Shreya Ghoshal",
    file:"audio/%E0%A4%9C_%E0%A4%A8__%E0%A4%B2%E0%A4%97__%E0%A4%B9___%E0%A4%AC_%E0%A4%B2_%E0%A4%B5_%E0%A4%A1_%E0%A4%B8___%E0%A4%97_%E0%A4%8F%E0%A4%B2__%E0%A4%97_-_%E0%A4%B0%E0%A4%AE_%E0%A4%AE_%E0%A4%AF__%E0%A4%B5_%E0%A4%B8_%E0%A4%A4_%E0%A4%B5_%E0%A4%AF__-_%E0%A4%97_%E0%A4%B0_%E0%A4%B6_%E0%A4%95_%E0%A4%AE_%E0%A4%B0__%E0%A4%B6_%E0%A4%B0_%E0%A4%A4__%E0%A4%B9_%E0%A4%B8%E0%A4%A8_256k_.mp3",
    color:"pink",
-   lyrics:"Jeene lagaa hoon pehley se zyaadaa\nPehley se zyaadaa tumpey marney lagaa\n\nMain, meraa dil aur tum ho yahaan\nPhir kyoon ho palkein jhukaaye wahaan\nTumsaa haseen pehley dekhaa nahin\n\nChaltee hai saansein pehle se zyaadaa\nPehley se zyaadaa dil theherne lagaa"},
+   lyrics:"Jeene lagaa hoon pehley se zyaadaa\nPehley se zyaadaa tumpey marney lagaa\n\nMain, meraa dil aur tum ho yahaan\nPhir kyoon ho palkein jhukaaye wahaan\nTumsaa haseen pehley dekhaa nahin"},
   {title:"Pehli Nazar Mein",
    artist:"Atif Aslam & Pritam",
    file:"audio/Pehli_Nazar_Mein_Kaise_Jaado_Kar_Diya___Atif_Aslam_Hits___Race_I_Akshaye__Bipasha___Saif_Ali_256k_.mp3",
    color:"blue",
-   lyrics:"Pehli nazar mein kaise jaado kar diya\nTera ban baita hai mera jiya\nJaane kya hoga kya pata\nIs pal ko milke aa jee le zara\n\nMein hoon yahan, Tu hai yahan\nMeri bahon mein aa, Aa bhi ja\nO jaan-e-jaan, Dono jahan\nMeri bahon mein aa, Bhool ja"},
+   lyrics:"Pehli nazar mein kaise jaado kar diya\nTera ban baita hai mera jiya\nJaane kya hoga kya pata\nIs pal ko milke aa jee le zara"},
   {title:"Tu Hi Mera",
    artist:"Shafqat Amanat Ali & Pritam",
    file:"audio/Tu_Hi_Mera_-_Audio_Lyrical___Emraan_Hashmi__Esha_Gupta___Jannat_2___Shafqat_Amanat_Ali___Pritam_256k_.mp3",
    color:"purple",
-   lyrics:"Tere ishq mein, dooba rahe din raat yoon hi sada\nMere khwaab se aankhein teri, ik pal bhi na hoye juda\n\nTu hi mera, mera, mera...\nHai teri chahat, teri zaroorat\nSooni hai tujh bin, duniya meri"},
+   lyrics:"Tere ishq mein, dooba rahe din raat yoon hi sada\nMere khwaab se aankhein teri, ik pal bhi na hoye juda\n\nTu hi mera, mera, mera..."},
   {title:"Tere Liye",
    artist:"Atif Aslam",
    file:"audio/Tere_Liye__Jhankar__256k_.mp3",
    color:"pink",
-   lyrics:"Jaagi jaagi soyi na main saari raat, tere liye\nBheegi bheegi palkein meri udaas, tere liye\nAkhiyan bichayi main, tere liye\nDuniya bhulayi maine, tere liye"},
+   lyrics:"Jaagi jaagi soyi na main saari raat, tere liye\nBheegi bheegi palkein meri udaas, tere liye"},
   {title:"Sach Keh Raha Hai",
    artist:"KK",
    file:"audio/Sach_Keh_Raha_Hai_Deewana___Rehnaa_Hai_Terre_Dil_Mein___R__Madhavan___Dia_Mirza___K_K_256k_.mp3",
@@ -311,122 +369,148 @@ const TRACKS=[
    artist:"Jigardan Gadhavi & Sachin-Jigar",
    file:"audio/Vhalam_Aavo_Ne___Love_Ni_Bhavai___Sachin-Jigar___Jigardan_Gadhavi___Gujarati_Song_256k_.mp3",
    color:"purple",
-   lyrics:"Hu mane sodhya karu\nPan hu tane paamya karu\nTu lai ne Aave laagni no melo re\n\nVahalam... Aavo ne Aavo ne"},
+   lyrics:"Hu mane sodhya karu\nPan hu tane paamya karu\nTu lai ne Aave laagni no melo re"},
   {title:"Tu Hi Haqeeqat",
    artist:"Javed Ali & Pritam",
    file:"audio/Tu_Hi_Haqeeqat_-_Lyrical_Song___Tum_Mile___Emraan_Hashmi___Soha_Ali_Khan___Javed_Ali___Pritam_256k_.mp3",
    color:"pink",
-   lyrics:"Tu hi haqeeqat, baaki sab sapne\nMujhe hai teri zaroorat\nTu hi haqeeqat, baaki sab sapne"},
+   lyrics:"Tu hi haqeeqat, baaki sab sapne\nMujhe hai teri zaroorat"},
   {title:"Tu Hi Haqeeqat (Lyric)",
    artist:"Javed Ali & Pritam",
    file:"audio/Tu_Hi_Haqeeqat_Lyric_Video_-_Tum_Mile_Emraan_Hashmi_Soha_Ali_Khan_Pritam_Javed_Ali_Shadab_256k_.mp3",
    color:"blue",
-   lyrics:"Tu hi haqeeqat, baaki sab sapne\nMujhe hai teri zaroorat\nTu hi haqeeqat, baaki sab sapne"},
+   lyrics:"Tu hi haqeeqat, baaki sab sapne\nMujhe hai teri zaroorat"},
   {title:"Zara Sa",
    artist:"KK & Pritam",
    file:"audio/Zara_Sa_-_Full_Video___Jannat___Emraan_Hashmi__Sonal___KK___Pritam___Sayeed_Quadri___Mahesh_Bhatt_256k_.mp3",
    color:"purple",
-   lyrics:"Zara sa jhoom loon main\nAaj pehli baar dil ne\nYeh kaha hai\n\nHaan maine dil diya\nUsne dil liya"},
+   lyrics:"Zara sa jhoom loon main\nAaj pehli baar dil ne\nYeh kaha hai"},
   {title:"Ye Tune Kya Kiya",
    artist:"Shreya Ghoshal & Pritam",
    file:"audio/Ye_Tune_Kya_Kiya_Song_Once_Upon_A_Time_In_Mumbaai_Dobara___Pritam___Akshay_Kumar__Sonakshi_Sinha_256k_.mp3",
    color:"pink",
-   lyrics:"Ye tune kya kiya\nJaane kab se dil mein tu samaa gayi\nYe tune kya kiya"},
+   lyrics:"Ye tune kya kiya\nJaane kab se dil mein tu samaa gayi"},
 ];
 
-const COLORS={
-  pink:  {pk:"#d4607a",pk2:"#f4a7b9",pk3:"#fce8ee",pk4:"#fdf6f8",folder:"pink"},
-  blue:  {pk:"#5878d0",pk2:"#98b8f0",pk3:"#dce8fc",pk4:"#f0f4fd",folder:"blue"},
-  purple:{pk:"#7858c0",pk2:"#b898f0",pk3:"#ece0fc",pk4:"#f5f0fd",folder:"blue"}, // purple uses blue assets
+// ─── Themes ──────────────────────────────────────────────
+const THEMES={
+  pink:{
+    pk:"#d4607a",pk2:"#f4a7b9",pk3:"#fce8ee",pk4:"#fdf6f8",
+    bg:"#18091f",sceneBg:"#1a0a28",
+    folder:"pink",
+    // record_player.png fills full width
+    sceneImg:"assets/pink/record_player.png",
+    scenePortrait:false,
+  },
+  blue:{
+    pk:"#5878d0",pk2:"#98b8f0",pk3:"#dce8fc",pk4:"#f0f4fd",
+    bg:"#08101f",sceneBg:"#0d1a2e",
+    folder:"blue",
+    // frame.png is portrait — show contained
+    sceneImg:"assets/blue/frame.png",
+    scenePortrait:true,
+  },
+  purple:{
+    pk:"#7858c0",pk2:"#b898f0",pk3:"#ece0fc",pk4:"#f5f0fd",
+    bg:"#100818",sceneBg:"#130b22",
+    folder:"blue", // reuse blue assets
+    sceneImg:"assets/blue/frame.png",
+    scenePortrait:true,
+  },
 };
 
 let cur=0,playing=false,liked=false,curVol=80,dragP=false,dragV=false;
 let shuffleOn=false,repeatOn=false;
+let curThemeKey='pink';
 const aud=document.getElementById('AUD');
 aud.volume=0.8;
 const $=id=>document.getElementById(id);
+const fmt=s=>(!s||isNaN(s)||!isFinite(s))?'0:00':`${Math.floor(s/60)}:${String(Math.floor(s%60)).padStart(2,'0')}`;
 
-function fmt(s){if(!s||isNaN(s)||!isFinite(s))return'0:00';const m=Math.floor(s/60),sc=Math.floor(s%60);return m+':'+(sc<10?'0':'')+sc;}
-
-// Switch all theme images to correct folder
-function applyC(key){
-  const c=COLORS[key]||COLORS.pink;
+// ─── Apply theme ─────────────────────────────────────────
+function applyTheme(key){
+  curThemeKey=key;
+  const t=THEMES[key]||THEMES.pink;
   const r=document.documentElement.style;
-  r.setProperty('--pk',c.pk);r.setProperty('--pk2',c.pk2);r.setProperty('--pk3',c.pk3);r.setProperty('--pk4',c.pk4);
+  r.setProperty('--pk',t.pk);
+  r.setProperty('--pk2',t.pk2);
+  r.setProperty('--pk3',t.pk3);
+  r.setProperty('--pk4',t.pk4);
+  r.setProperty('--bg',t.bg);
+  document.body.style.background=t.bg;
 
-  const f=c.folder;
+  const f=t.folder;
 
-  // Update all button images to theme folder
-  const imgs={
-    SETBTN:`assets/${f}/settings.png`,
-    MINBTN:`assets/${f}/minimizer_button.png`,
-    WINBTN:`assets/${f}/window_button.png`,
-    EXITBTN:`assets/${f}/exit_button.png`,
-    AART_FRAME:`assets/${f}/album_frame.png`,
-    SHUF:`assets/${f}/shuffle_button.png`,
-    REP:`assets/${f}/repeat_button.png`,
-    PBAR_BG:`assets/${f}/progress_bar.png`,
-    VBAR_BG:`assets/${f}/volume_bar_low.png`,
-    MUTE_BTN:`assets/${f}/mute_button.png`,
-    PBTN_IMG: playing ? `assets/${f}/pause_button.png` : `assets/${f}/play_button.png`,
-  };
-  for(const[id,src]of Object.entries(imgs)){const el=$(id);if(el&&el.tagName==='IMG')el.src=src;}
+  // Titlebar buttons
+  const btns={SETBTN:'settings',MINBTN:'minimizer_button',WINBTN:'window_button',EXITBTN:'exit_button'};
+  for(const[id,name]of Object.entries(btns)){const el=$(id);if(el)el.src=`assets/${f}/${name}.png`;}
 
-  // Update forward/back buttons (no IDs, select by alt text)
-  document.querySelectorAll('.cbtn-img').forEach(img=>{
-    if(img.alt==='prev') img.src=`assets/${f}/backwards_button.png`;
-    if(img.alt==='next') img.src=`assets/${f}/forwards_button.png`;
-  });
-  document.querySelectorAll('.volic-img').forEach(img=>{
-    if(img.alt==='vol down') img.src=`assets/${f}/volume_bar_low.png`;
-    if(img.alt==='vol up')   img.src=`assets/${f}/volume_bar_high.png`;
-    if(img.alt==='max')      img.src=`assets/${f}/volume_button.png`;
-  });
+  // Control buttons
+  $('PREVBTN').src=`assets/${f}/backwards_button.png`;
+  $('NEXTBTN').src=`assets/${f}/forwards_button.png`;
+  $('PBTN').src=playing?`assets/${f}/pause_button.png`:`assets/${f}/play_button.png`;
 
-  // Scene: pink=record_player (wide, transparent bg), blue/purple=frame (portrait card)
-  const sceneImg=$('SCENE_IMG');
+  // Extra buttons
+  const shuf=$('SHUF'),rep=$('REP');
+  if(shuf)shuf.src=`assets/${f}/shuffle_button.png`;
+  if(rep)rep.src=`assets/${f}/repeat_button.png`;
+
+  // Progress / volume
+  const pbg=$('PBAR_BG');if(pbg)pbg.src=`assets/${f}/progress_bar.png`;
+  const vbg=$('VBARBG');if(vbg)vbg.src=`assets/${f}/volume_bar_low.png`;
+  const mi=$('MUTE_IMG');if(mi)mi.src=`assets/${f}/mute_button.png`;
+  const vh=$('VHIGH_IMG');if(vh)vh.src=`assets/${f}/volume_bar_high.png`;
+
+  // Album frame
+  const af=$('AART_FRAME');if(af)af.src=`assets/${f}/album_frame.png`;
+
+  // Scene image
+  const sceneBg=$('SCENE_BG');
   const sceneEl=$('SCENE');
-  if(sceneImg){
-    if(f==='pink'){
-      sceneImg.src='assets/pink/record_player.png';
-      sceneImg.classList.remove('frame-mode');
-      if(sceneEl) sceneEl.style.background='#2e1838';
+  if(sceneBg){
+    sceneBg.style.opacity='0';
+    sceneBg.onload=()=>{ sceneBg.style.opacity='1'; };
+    sceneBg.src=t.sceneImg;
+    if(t.scenePortrait){
+      // portrait card: show at natural height, centred
+      sceneBg.classList.add('portrait');
+      if(sceneEl) sceneEl.style.cssText=`background:${t.sceneBg};min-height:200px;`;
     } else {
-      sceneImg.src=`assets/${f}/frame.png`;
-      sceneImg.classList.add('frame-mode');
-      if(sceneEl) sceneEl.style.background='#0d1f2e';
+      // landscape: fill full width
+      sceneBg.classList.remove('portrait');
+      if(sceneEl) sceneEl.style.cssText=`background:${t.sceneBg};`;
     }
-    sceneImg.style.opacity='0';
-    sceneImg.onload = ()=>{ sceneImg.style.opacity='1'; };
-    // If image already cached, onload won't fire — force it
-    if(sceneImg.complete) sceneImg.style.opacity='1';
+    // if already cached
+    if(sceneBg.complete) sceneBg.style.opacity='1';
   }
 }
 
+// ─── Load track ──────────────────────────────────────────
 function loadT(idx,auto=false){
   cur=((idx%TRACKS.length)+TRACKS.length)%TRACKS.length;
   const t=TRACKS[cur];
-  applyC(t.color||'pink');
+  applyTheme(t.color||'pink');
 
-  const tn=$('TNAME');tn.textContent=t.title;tn.classList.toggle('mq',t.title.length>16);
+  const tn=$('TNAME');
+  tn.textContent=t.title;
+  tn.classList.toggle('mq',t.title.length>16);
   $('TART').textContent=t.artist;
-  $('ltitle').textContent=t.title+' — '+t.artist;
+  $('ltitle').textContent=`${t.title} — ${t.artist}`;
   $('lbox').textContent=t.lyrics||'Lyrics not available.';
-  $('PFILL').style.width='0%';$('CT').textContent='0:00';$('TT').textContent='0:00';
+  $('PFILL').style.width='0%';
+  $('CT').textContent='0:00';
+  $('TT').textContent='0:00';
 
-  // Use the file path directly — already URL-encoded where needed
   aud.src=t.file;
   aud.load();
-  if(auto||playing){aud.play().then(()=>setPlay(true)).catch(e=>console.warn('Audio error:',e));}
+  if(auto||playing) aud.play().then(()=>setPlay(true)).catch(e=>console.error('❌ Audio failed ['+(['','ABORTED','NETWORK','DECODE','NOT_SUPPORTED'][aud.error?.code]||'?')+']:',aud.src));
   renderPL();
 }
 
 function setPlay(s){
   playing=s;
-  const c=COLORS[TRACKS[cur].color||'pink'];
-  const f=c.folder;
-  const pb=$('PBTN_IMG');
-  if(pb) pb.src=s?`assets/${f}/pause_button.png`:`assets/${f}/play_button.png`;
+  const f=THEMES[curThemeKey].folder;
+  $('PBTN').src=s?`assets/${f}/pause_button.png`:`assets/${f}/play_button.png`;
   renderPL();
 }
 
@@ -434,45 +518,41 @@ function togPlay(){
   if(playing){aud.pause();setPlay(false);}
   else{
     if(!aud.src||aud.readyState===0){loadT(cur,true);return;}
-    aud.play().then(()=>setPlay(true)).catch(e=>console.warn(e));
+    aud.play().then(()=>setPlay(true)).catch(()=>{});
   }
 }
-
 function prevT(){loadT(cur-1,playing);}
 function nextT(){loadT(cur+1,playing);}
+function togShuffle(){shuffleOn=!shuffleOn;$('SHUF').classList.toggle('on',shuffleOn);}
+function togRepeat(){repeatOn=!repeatOn;aud.loop=repeatOn;$('REP').classList.toggle('on',repeatOn);}
 
-function togShuffle(){
-  shuffleOn=!shuffleOn;
-  $('SHUF').classList.toggle('on',shuffleOn);
-}
-function togRepeat(){
-  repeatOn=!repeatOn;
-  aud.loop=repeatOn;
-  $('REP').classList.toggle('on',repeatOn);
-}
-
+// ─── Audio events ────────────────────────────────────────
 aud.addEventListener('timeupdate',()=>{
   if(dragP||!aud.duration)return;
   const p=(aud.currentTime/aud.duration)*100;
-  $('PFILL').style.width=p+'%';$('CT').textContent=fmt(aud.currentTime);
+  $('PFILL').style.width=p+'%';
+  $('CT').textContent=fmt(aud.currentTime);
 });
 aud.addEventListener('loadedmetadata',()=>$('TT').textContent=fmt(aud.duration));
-aud.addEventListener('error',()=>{
-  const codes={1:'ABORTED',2:'NETWORK',3:'DECODE',4:'NOT_SUPPORTED'};
-  const code=aud.error?aud.error.code:0;
-  console.error(`❌ Audio failed [${codes[code]||code}]: ${aud.src}`);
-  $('TART').textContent='⚠️ audio error — check console';
-});
 aud.addEventListener('ended',()=>{
-  if(!repeatOn){
-    if(shuffleOn){loadT(Math.floor(Math.random()*TRACKS.length),true);}
-    else nextT();
-  }
+  if(!repeatOn) shuffleOn?loadT(Math.floor(Math.random()*TRACKS.length),true):nextT();
+});
+aud.addEventListener('error',()=>{
+  const codes=['','ABORTED','NETWORK','DECODE','NOT_SUPPORTED'];
+  console.error('❌ Audio failed ['+(codes[aud.error?.code]||'?')+']:', aud.src);
+  $('TART').textContent='⚠️ cannot load audio';
 });
 
-// Progress drag
+// ─── Progress drag ───────────────────────────────────────
 const pb=$('PBAR');
-function seekX(cx){if(!aud.duration)return;const r=pb.getBoundingClientRect();const p=Math.max(0,Math.min(1,(cx-r.left)/r.width));aud.currentTime=p*aud.duration;$('PFILL').style.width=(p*100)+'%';$('CT').textContent=fmt(aud.currentTime);}
+function seekX(cx){
+  if(!aud.duration)return;
+  const r=pb.getBoundingClientRect();
+  const p=Math.max(0,Math.min(1,(cx-r.left)/r.width));
+  aud.currentTime=p*aud.duration;
+  $('PFILL').style.width=(p*100)+'%';
+  $('CT').textContent=fmt(aud.currentTime);
+}
 pb.addEventListener('click',e=>{if(!dragP)seekX(e.clientX);});
 $('PTHMB').addEventListener('mousedown',e=>{dragP=true;e.preventDefault();});
 $('PTHMB').addEventListener('touchstart',()=>dragP=true,{passive:true});
@@ -481,44 +561,41 @@ document.addEventListener('touchmove',e=>{if(dragP)seekX(e.touches[0].clientX);}
 document.addEventListener('mouseup',()=>dragP=false);
 document.addEventListener('touchend',()=>dragP=false);
 
-// Volume
+// ─── Volume ──────────────────────────────────────────────
 function setVol(v){
   curVol=Math.max(0,Math.min(100,Math.round(+v)));
   aud.volume=curVol/100;
   $('VOLNUM').textContent=curVol+'%';
   $('VFILL').style.width=curVol+'%';
-  $('VTHMB').style.left=`calc(${curVol}% - 9px)`;
-  // swap volume bar image
-  const c=COLORS[TRACKS[cur].color||'pink'];
-  const vbg=$('VBAR_BG');
-  if(vbg) vbg.src=`assets/${c.folder}/${curVol>50?'volume_bar_high':'volume_bar_low'}.png`;
+  $('VTHMB').style.left=`calc(${curVol}% - 8px)`;
 }
-function volClick(e){const r=$('VBAR').getBoundingClientRect();setVol(((e.clientX-r.left)/r.width)*100);}
-$('VTHMB').addEventListener('mousedown',e=>{dragV=true;e.preventDefault();});
-$('VTHMB').addEventListener('touchstart',()=>dragV=true,{passive:true});
+function volClick(e){
+  const r=$('VBAR').getBoundingClientRect();
+  setVol(((e.clientX-r.left)/r.width)*100);
+}
+const vt=$('VTHMB');
+vt.addEventListener('mousedown',e=>{dragV=true;e.preventDefault();});
+vt.addEventListener('touchstart',()=>dragV=true,{passive:true});
 document.addEventListener('mousemove',e=>{if(!dragV)return;const r=$('VBAR').getBoundingClientRect();setVol(((e.clientX-r.left)/r.width)*100);});
 document.addEventListener('touchmove',e=>{if(!dragV)return;const r=$('VBAR').getBoundingClientRect();setVol(((e.touches[0].clientX-r.left)/r.width)*100);},{passive:true});
 document.addEventListener('mouseup',()=>dragV=false);
 document.addEventListener('touchend',()=>dragV=false);
 
+// ─── Like ────────────────────────────────────────────────
 function togLike(){
   liked=!liked;
   const b=$('BIGH');
   b.style.color=liked?'#ff2266':'var(--pk)';
   b.style.transform=liked?'scale(1.3) rotate(-10deg)':'scale(1)';
-  // pulse animation
-  b.style.transition='all .2s';
 }
 
+// ─── Settings panel ──────────────────────────────────────
 function togS(){$('spanel').classList.toggle('open');renderPL();}
 document.addEventListener('click',e=>{if(!e.target.closest('.wbtns'))$('spanel').classList.remove('open');});
 
-function setTheme(t){
-  $('btnPk').classList.toggle('on',t==='pink');
-  $('btnBl').classList.toggle('on',t==='blue');
-  $('btnPu').classList.toggle('on',t==='purple');
-  // re-apply current track color with new theme preference
-  applyC(t);
+function setTheme(k){
+  ['btnPk','btnBl','btnPu'].forEach((id,i)=>$(id).classList.toggle('on',['pink','blue','purple'][i]===k));
+  applyTheme(k);
 }
 
 function renderPL(){
@@ -532,16 +609,23 @@ function renderPL(){
   });
 }
 
+// ─── Keyboard shortcuts ──────────────────────────────────
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT')return;
   if(e.code==='Space'){e.preventDefault();togPlay();}
   if(e.code==='ArrowRight')nextT();
   if(e.code==='ArrowLeft')prevT();
-  if(e.code==='ArrowUp')setVol(curVol+10);
-  if(e.code==='ArrowDown')setVol(curVol-10);
+  if(e.code==='ArrowUp'){e.preventDefault();setVol(curVol+10);}
+  if(e.code==='ArrowDown'){e.preventDefault();setVol(curVol-10);}
 });
 
-setVol(80);applyC('pink');loadT(0,false);renderPL();
+// ─── Init ────────────────────────────────────────────────
+setVol(80);
+applyTheme('pink');
+loadT(0,false);
+renderPL();
 </script>
 </body>
 </html>
+HTMLEOF
+echo "Done — $(wc -l < /mnt/user-data/outputs/index.html) lines"
